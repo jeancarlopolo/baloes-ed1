@@ -49,6 +49,6 @@ void setLinhaY2(Linha l, double y2);
 void setLinhaCor(Linha l, char *cor);
 
 /** Libera a memória alocada para a linha. */
-void freeLinha(Linha l);
+void liberaLinha(Linha l);
 
 #endif

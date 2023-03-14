@@ -84,7 +84,7 @@ void setLinhaCor(Linha l, char *cor)
     ((struct linha *)l)->corBorda = cor;
 }
 
-void freeLinha(Linha l)
+void liberaLinha(Linha l)
 {
     struct linha *li = (struct linha *)l;
     free(li->corBorda);

@@ -225,6 +225,8 @@ void liberaForma(Item info)
 
 void killLst(Lista L)
 {
+    if (L == NULL)
+        return;
     struct lista *lst = (struct lista *)L;
     struct elemento *elem = lst->inicio;
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fila.h"
+#include "lista.h"
 
 struct no
 {
@@ -101,7 +102,14 @@ void destroiFila(Fila fila)
 {
     struct fila_circular *fc = (struct fila_circular *)fila;
 
-    free(fc->elementos);
+    for (int i = 0; i < fc->tamanho; i++)
+    {
+        if (fc->elementos[i].elemento != NULL)
+        {
+            killLst(fc->elementos[i].elemento);
+        }
+    }
 
+    free(fc->elementos);
     free(fc);
 }
