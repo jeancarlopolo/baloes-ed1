@@ -17,6 +17,12 @@ struct lista
     int capacidade;
 };
 
+struct iterador
+{
+    struct elemento *atual;
+    bool reverso;
+};
+
 Lista createLst(int capacidade)
 {
     struct lista *lst = (struct lista *)malloc(sizeof(struct lista));
@@ -230,4 +236,109 @@ void killLst(Lista L)
     }
 
     free(lst);
+}
+
+Iterador createIterador(Lista L, bool reverso)
+{
+    struct lista *lst = (struct lista *)L;
+    struct iterador *iter = (struct iterador *)malloc(sizeof(struct iterador));
+
+    if (reverso)
+    {
+        iter->atual = getLastLst(lst);
+    }
+    else
+    {
+        iter->atual = getFirstLst(lst);
+    }
+
+    iter->reverso = reverso;
+
+    return iter;
+}
+
+bool isIteratorEmpty(Lista L, Iterador it)
+{
+    if (it == NULL)
+        return true;
+    struct iterador *iter = (struct iterador *)it;
+    if (iter->reverso)
+    {
+        return iter->atual == getFirstLst(L);
+    }
+    else
+    {
+        return iter->atual == getLastLst(L);
+    }
+}
+
+Item getIteratorNext(Lista L, Iterador it)
+{
+    struct iterador *iter = (struct iterador *)it;
+    struct elemento *elem = (struct elemento *)iter->atual;
+
+    if (iter->reverso)
+    {
+        iter->atual = elem->anterior;
+    }
+    else
+    {
+        iter->atual = elem->proximo;
+    }
+
+    return elem->item;
+}
+
+void killIterator(Lista L, Iterador it)
+{
+    free(it);
+}
+
+Lista map(Lista L, Apply f)
+{
+    Lista novaLst = createLst(-1);
+    Iterador it = createIterador(L, false);
+
+    while (!isIteratorEmpty(L, it))
+    {
+        Item info = getIteratorNext(L, it);
+        Item novoInfo = f(info);
+        insertLst(novaLst, novoInfo);
+    }
+
+    killIterator(L, it);
+
+    return novaLst;
+}
+
+Lista filter(Lista L, Check f)
+{
+    Lista novaLst = createLst(-1);
+    Iterador it = createIterador(L, false);
+
+    while (!isIteratorEmpty(L, it))
+    {
+        Item info = getIteratorNext(L, it);
+        if (f(info))
+        {
+            insertLst(novaLst, info);
+        }
+    }
+
+    killIterator(L, it);
+
+    return novaLst;
+}
+
+void fold(Lista L, ApplyClosure f, Clausura c)
+{
+    Iterador it = createIterador(L, false);
+
+    while (!isIteratorEmpty(L, it))
+    {
+        Item info = getIteratorNext(L, it);
+        f(info, c);
+    }
+
+    killIterator(L, it);
 }
