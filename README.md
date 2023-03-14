@@ -1,5 +1,6 @@
 # Trabalho 1 - Estrutura de Dados
-![image](https://user-images.githubusercontent.com/92150848/224828551-4ffe9180-bf9b-4d33-b688-e52fa38e21a4.png)
+![image](https://user-images.githubusercontent.com/92150848/224928731-e176f871-3ba1-4c7e-b087-ad9bb12001aa.png)
+---
 >O mundo de Pandora vive momentos de tensão entre os povos Ya’nki e Chi’ni. O povo
 Chi’ni enviou secretamente balões para espionar o território dos Ya’nki. Estes descobriram objetos
 voadores e enviam caças para derrubá-los via bombas de detonação por afastamento. Entretanto, os
