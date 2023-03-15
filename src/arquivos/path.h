@@ -24,4 +24,13 @@ char *path_get_filename(Path path);
 /** Retorna a extensão do arquivo. */
 char *path_get_extension(Path path);
 
+/** Define o diretório do arquivo. */
+void path_set_dir(Path path, char *dir);
+
+/** Define o nome do arquivo. */
+void path_set_filename(Path path, char *filename);
+
+/** Define a extensão do arquivo. */
+void path_set_extension(Path path, char *ext);
+
 #endif

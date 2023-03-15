@@ -94,3 +94,21 @@ char *path_get_extension(Path path)
     struct fullpath *p = (struct fullpath *)path;
     return p->ext;
 }
+
+void path_set_dir(Path path, char *dir)
+{
+    struct fullpath *p = (struct fullpath *)path;
+    strcpy(p->caminho, dir);
+}
+
+void path_set_filename(Path path, char *filename)
+{
+    struct fullpath *p = (struct fullpath *)path;
+    strcpy(p->nome, filename);
+}
+
+void path_set_extension(Path path, char *ext)
+{
+    struct fullpath *p = (struct fullpath *)path;
+    strcpy(p->ext, ext);
+}

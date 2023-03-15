@@ -22,8 +22,8 @@ void svg_rect(FILE *svg,
               char *stroke,
               char *style)
 {
-    fprintf(svg, "\
-    <rect x=\"%d\" \
+    fprintf(svg, "<rect \
+    x=\"%d\" \
     y=\"%d\" \
     width=\"%d\" \
     height=\"%d\" \
@@ -48,8 +48,8 @@ void svg_text(FILE *svg,
               char *stroke,
               char *style)
 {
-    fprintf(svg, "\
-    <text x=\"%d\" \
+    fprintf(svg, "<text \
+    x=\"%d\" \
     y=\"%d\" \
     fill=\"%s\" \
     stroke=\"%s\" \
@@ -71,8 +71,8 @@ void svg_line(FILE *svg,
               char *stroke,
               char *style)
 {
-    fprintf(svg, "\
-    <line x1=\"%d\" \
+    fprintf(svg, "<line \
+    x1=\"%d\" \
     y1=\"%d\" \
     x2=\"%d\" \
     y2=\"%d\" \
@@ -95,8 +95,8 @@ void svg_circle(FILE *svg,
                 char *stroke,
                 char *style)
 {
-    fprintf(svg, "\
-    <circle cx=\"%d\" \
+    fprintf(svg, "<circle \
+    cx=\"%d\" \
     cy=\"%d\" \
     r=\"%d\" \
     fill=\"%s\" \
@@ -110,4 +110,3 @@ void svg_circle(FILE *svg,
             stroke,
             style);
 }
-
