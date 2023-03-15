@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include "path.h"
 
+#define MAX 150
+
 struct fullpath
 {
-    char *caminho;
-    char *nome;
-    char *ext;
+    char caminho[MAX];
+    char nome[MAX];
+    char ext[MAX];
 };
 
 Path path_create(char *path)
@@ -25,7 +27,7 @@ Path path_create(char *path)
         // Copiar a parte do path completo antes do último '/' para o path
         int len = ultimo_slash - path;
         strncpy(p->caminho, path, len);
-        p->caminho[len] = '\0';
+        p->caminho[len + 1] = '\0';
         // Copiar a parte do path completo depois do último '/' para o nome do arquivo
         strcpy(p->nome, ultimo_slash + 1);
     }
@@ -43,6 +45,7 @@ Path path_create(char *path)
         // Remover a extensão do nome do arquivo
         *ultimo_ponto = '\0';
     }
+    return (Path)p;
 }
 
 void path_destroy(Path path)

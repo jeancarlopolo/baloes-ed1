@@ -10,6 +10,7 @@ struct texto
     char *corBorda;
     char *corPreenchimento;
     char *ancora;
+    double rotacao;
 };
 
 char *textoFamilia = "sans (sans-serif)";
@@ -27,6 +28,7 @@ Texto criaTexto(int id, double x, double y, char *corBorda, char *corPreenchimen
     t->corPreenchimento = corPreenchimento;
     t->ancora = ancora;
     t->conteudo = conteudo;
+    t->rotacao = 0;
     return t;
 }
 
@@ -65,7 +67,7 @@ char *getTextoConteudo(Texto t)
     return ((struct texto *)t)->conteudo;
 }
 
-char *getTextoLength(Texto t)
+int getTextoLength(Texto t)
 {
     return strlen(((struct texto *)t)->conteudo);
 }
@@ -113,4 +115,14 @@ void liberarTexto(Texto t)
     free(texto->ancora);
     free(texto->conteudo);
     free(texto);
+}
+
+void rotacionaTexto(Texto t, double theta)
+{
+    ((struct texto *)t)->rotacao += theta;
+}
+
+double getTextoRotacao(Texto t)
+{
+    return ((struct texto *)t)->rotacao;
 }

@@ -38,7 +38,10 @@ char *getTextoAncora(Texto t);
 char *getTextoConteudo(Texto t);
 
 /** Retorna o número de caracteres do texto. */
-char *getTextoLength(Texto t);
+int getTextoLength(Texto t);
+
+/** Retorna a rotação do texto. */
+double getTextoRotacao(Texto t);
 
 /** Define o id do texto. */
 void setTextoId(Texto t, int id);
@@ -60,6 +63,9 @@ void setTextoAncora(Texto t, char *ancora);
 
 /** Define o conteúdo do texto. */
 void setTextoConteudo(Texto t, char *conteudo);
+
+/** Rotaciona o texto em torno do ponto (x, y) em um ângulo de theta graus. */
+void rotacionaTexto(Texto t, double theta);
 
 /** Libera a memória alocada para o texto. */
 void liberaTexto(Texto t);

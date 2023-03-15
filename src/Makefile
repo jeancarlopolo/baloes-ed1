@@ -2,10 +2,10 @@
 objects = ted
 
 # .c files
-C_SOURCE=$(wildcard *.c)
+C_SOURCE=$(wildcard **/*.c) $(wildcard *.c)
 
 # .h files
-H_SOURCE=$(wildcard *.h)
+H_SOURCE=$(wildcard **/*.h) $(wildcard *.h)
 
 # Object files
 OBJ=$(C_SOURCE:.c=.o)
@@ -42,6 +42,7 @@ main.o: main.c $(H_SOURCE)
 	$(CC) -o $@ $< -c $(CC_FLAGS)
 
 clean:
+	rm -rf **/*.o $(objects) *~
 	rm -rf *.o $(objects) *~
 
 pack: $(objects)
@@ -49,3 +50,5 @@ pack: $(objects)
 	echo $(ALUNO)
 	date >> .entrega
 	cd ..; zip $(ALUNO).zip -r src/*.c src/*.h src/Makefile LEIA-ME.txt src/.entrega
+
+.PRECIOUS: %.o

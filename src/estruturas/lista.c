@@ -125,7 +125,7 @@ void removeLst(Lista L, Posic p)
     free(elem);
 }
 
-Item getLst(Lista L, Posic p)
+Item getLst(Posic p)
 {
     struct elemento *elem = (struct elemento *)p;
     return elem->item;
@@ -154,9 +154,8 @@ Posic insertBefore(Lista L, Posic p, Item info)
     return novoElem;
 }
 
-Posic insertAfterLst(Lista L, Posic p, Item info)
+Posic insertAfterLst(Posic p, Item info)
 {
-    struct lista *lst = (struct lista *)L;
     struct elemento *elem = (struct elemento *)p;
     struct elemento *novoElem = (struct elemento *)malloc(sizeof(struct elemento));
 
@@ -177,7 +176,7 @@ Posic getFirstLst(Lista L)
     return lst->inicio;
 }
 
-Posic getNextLst(Lista L, Posic p)
+Posic getNextLst(Posic p)
 {
     struct elemento *elem = (struct elemento *)p;
     return elem->proximo;
@@ -195,49 +194,30 @@ Posic getLastLst(Lista L)
     return elem;
 }
 
-Posic getPreviousLst(Lista L, Posic p)
+Posic getPreviousLst(Posic p)
 {
     struct elemento *elem = (struct elemento *)p;
     return elem->anterior;
-}
-
-void liberaForma(Item info)
-{
-    enum TipoForma tipo = getTipoForma(info);
-    switch (tipo)
-    {
-    case CIRCULO:
-        liberaCirculo(info);
-        break;
-    case RETANGULO:
-        liberaRetangulo(info);
-        break;
-    case TEXTO:
-        liberaTexto(info);
-        break;
-    case LINHA:
-        liberaLinha(info);
-        break;
-    default:
-        break;
-    }
 }
 
 void killLst(Lista L)
 {
     if (L == NULL)
         return;
+    
     struct lista *lst = (struct lista *)L;
     struct elemento *elem = lst->inicio;
 
-    for (elem = lst->inicio; elem != NULL; elem = lst->inicio)
+    while (elem != NULL)
     {
-        liberaForma(elem->item);
-        lst->inicio = elem->proximo;
-        free(elem);
+        struct elemento *aux = elem;
+        elem = elem->proximo;
+        free(aux);
     }
 
     free(lst);
+
+    L = NULL;
 }
 
 Iterador createIterador(Lista L, bool reverso)
@@ -274,7 +254,7 @@ bool isIteratorEmpty(Lista L, Iterador it)
     }
 }
 
-Item getIteratorNext(Lista L, Iterador it)
+Item getIteratorNext(Iterador it)
 {
     struct iterador *iter = (struct iterador *)it;
     struct elemento *elem = (struct elemento *)iter->atual;
@@ -291,7 +271,7 @@ Item getIteratorNext(Lista L, Iterador it)
     return elem->item;
 }
 
-void killIterator(Lista L, Iterador it)
+void killIterator(Iterador it)
 {
     free(it);
 }
@@ -303,12 +283,12 @@ Lista map(Lista L, Apply f)
 
     while (!isIteratorEmpty(L, it))
     {
-        Item info = getIteratorNext(L, it);
+        Item info = getIteratorNext(it);
         Item novoInfo = f(info);
         insertLst(novaLst, novoInfo);
     }
 
-    killIterator(L, it);
+    killIterator(it);
 
     return novaLst;
 }
@@ -320,14 +300,14 @@ Lista filter(Lista L, Check f)
 
     while (!isIteratorEmpty(L, it))
     {
-        Item info = getIteratorNext(L, it);
+        Item info = getIteratorNext(it);
         if (f(info))
         {
             insertLst(novaLst, info);
         }
     }
 
-    killIterator(L, it);
+    killIterator(it);
 
     return novaLst;
 }
@@ -338,9 +318,9 @@ void fold(Lista L, ApplyClosure f, Clausura c)
 
     while (!isIteratorEmpty(L, it))
     {
-        Item info = getIteratorNext(L, it);
+        Item info = getIteratorNext(it);
         f(info, c);
     }
 
-    killIterator(L, it);
+    killIterator(it);
 }

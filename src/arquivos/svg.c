@@ -29,7 +29,7 @@ void svg_rect(FILE *svg,
     height=\"%d\" \
     fill=\"%s\" \
     stroke=\"%s\" \
-    style=\"%s\" \
+    %s \
     />\n",
             x,
             y,
@@ -46,6 +46,10 @@ void svg_text(FILE *svg,
               char *text,
               char *fill,
               char *stroke,
+              double transform,
+              char *family,
+              char *weight,
+              char *size,
               char *style)
 {
     fprintf(svg, "<text \
@@ -53,12 +57,22 @@ void svg_text(FILE *svg,
     y=\"%d\" \
     fill=\"%s\" \
     stroke=\"%s\" \
-    style=\"%s\" \
+    transform=\"rotate(%f %d %d)\" \
+    font-family=\"%s\" \
+    font-weight=\"%s\" \
+    font-size=\"%s\" \
+    %s \
     >%s</text>\n",
             x,
             y,
             fill,
             stroke,
+            transform,
+            x,
+            y,
+            family,
+            weight,
+            size,
             style,
             text);
 }
@@ -77,7 +91,7 @@ void svg_line(FILE *svg,
     x2=\"%d\" \
     y2=\"%d\" \
     stroke=\"%s\" \
-    style=\"%s\" \
+    %s \
     />\n",
             x1,
             y1,
@@ -101,7 +115,7 @@ void svg_circle(FILE *svg,
     r=\"%d\" \
     fill=\"%s\" \
     stroke=\"%s\" \
-    style=\"%s\" \
+    %s \
     />\n",
             cx,
             cy,
