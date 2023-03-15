@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 /** Conjunto de funções para leitura de arquivos. */
 
 /** Função que lê uma linha de um arquivo e separa as palavras em um vetor de strings.
