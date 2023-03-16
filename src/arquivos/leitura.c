@@ -12,7 +12,7 @@ void ler_linha(FILE *arq, char *palavras[], int *n)
 	char *token;
 	const char *delim = " \t\n";
 	int i = 0;
-
+	*n = i;
 	// lê uma linha do arquivo
 	if (fgets(linha, MAX, arq) != NULL)
 	{
@@ -42,7 +42,7 @@ void ler_geo(FILE *geo, Lista *lista)
 	char **ponteiro = NULL;
 	char texto[MAX];
 	// enquanto não chegar ao final do arquivo
-	while (!feof(geo))
+	while (true)
 	{
 		// lê uma linha do arquivo
 		ler_linha(geo, palavras, &n);
@@ -71,17 +71,11 @@ void ler_geo(FILE *geo, Lista *lista)
 			}
 			else if (strcmp(palavras[0], "t") == 0)
 			{
-				if (n > 8)
+				strcpy(texto, palavras[7]);
+				for (int i = 8; i < n; i++)
 				{
-					for (int i = 7; i < n; i++)
-					{
-						strcat(texto, palavras[i]);
-						strcat(texto, " ");
-					}
-				}
-				else
-				{
-					strcpy(texto, palavras[7]);
+					strcat(texto, " ");
+					strcat(texto, palavras[i]);
 				}
 				Texto t = criaTexto(atoi(palavras[1]),
 									strtod(palavras[2], ponteiro),
@@ -115,6 +109,10 @@ void ler_geo(FILE *geo, Lista *lista)
 					textoPeso = "lighter";
 				textoTamanho = palavras[3];
 			}
+		}
+		else
+		{
+			break;
 		}
 	}
 }

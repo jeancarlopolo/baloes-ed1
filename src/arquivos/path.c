@@ -50,11 +50,7 @@ Path path_create(char *path)
 
 void path_destroy(Path path)
 {
-    struct fullpath *p = (struct fullpath *)path;
-    free(p->caminho);
-    free(p->nome);
-    free(p->ext);
-    free(p);
+    free(path);
 }
 
 char *path_get_full(Path path)
@@ -101,6 +97,8 @@ char *path_get_extension(Path path)
 void path_set_dir(Path path, char *dir)
 {
     struct fullpath *p = (struct fullpath *)path;
+    if (dir[strlen(dir) - 1] != '/')
+        strcat(dir, "/");
     strcpy(p->caminho, dir);
 }
 

@@ -114,7 +114,7 @@ Iterador createIterador(Lista L, bool reverso);
    i.e., todos os item ja' tenham sido retornados; falso,
    caso contrario.
  */
-bool isIteratorEmpty(Lista L, Iterador it);
+bool isIteratorEmpty(Iterador it);
 
 /**
    Retorna o proximo item. O iterador nao deve estar esgotado.

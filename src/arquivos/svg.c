@@ -22,15 +22,16 @@ void svg_rect(FILE *svg,
               char *stroke,
               char *style)
 {
+    style = style == NULL ? "" : style;
     fprintf(svg, "<rect \
-    x=\"%d\" \
-    y=\"%d\" \
-    width=\"%d\" \
-    height=\"%d\" \
-    fill=\"%s\" \
-    stroke=\"%s\" \
-    %s \
-    />\n",
+x=\"%d\" \
+y=\"%d\" \
+width=\"%d\" \
+height=\"%d\" \
+fill=\"%s\" \
+stroke=\"%s\" \
+%s \
+/>\n",
             x,
             y,
             w,
@@ -52,17 +53,18 @@ void svg_text(FILE *svg,
               char *size,
               char *style)
 {
+    style = style == NULL ? "" : style;
     fprintf(svg, "<text \
-    x=\"%d\" \
-    y=\"%d\" \
-    fill=\"%s\" \
-    stroke=\"%s\" \
-    transform=\"rotate(%f %d %d)\" \
-    font-family=\"%s\" \
-    font-weight=\"%s\" \
-    font-size=\"%s\" \
-    %s \
-    >%s</text>\n",
+x=\"%d\" \
+y=\"%d\" \
+fill=\"%s\" \
+stroke=\"%s\" \
+transform=\"rotate(%f %d %d)\" \
+font-family=\"%s\" \
+font-weight=\"%s\" \
+font-size=\"%s\" \
+%s \
+>%s</text>\n",
             x,
             y,
             fill,
@@ -85,14 +87,15 @@ void svg_line(FILE *svg,
               char *stroke,
               char *style)
 {
+    style = style == NULL ? "" : style;
     fprintf(svg, "<line \
-    x1=\"%d\" \
-    y1=\"%d\" \
-    x2=\"%d\" \
-    y2=\"%d\" \
-    stroke=\"%s\" \
-    %s \
-    />\n",
+x1=\"%d\" \
+y1=\"%d\" \
+x2=\"%d\" \
+y2=\"%d\" \
+stroke=\"%s\" \
+%s \
+/>\n",
             x1,
             y1,
             x2,
@@ -109,14 +112,15 @@ void svg_circle(FILE *svg,
                 char *stroke,
                 char *style)
 {
+    style = style == NULL ? "" : style;
     fprintf(svg, "<circle \
-    cx=\"%d\" \
-    cy=\"%d\" \
-    r=\"%d\" \
-    fill=\"%s\" \
-    stroke=\"%s\" \
-    %s \
-    />\n",
+cx=\"%d\" \
+cy=\"%d\" \
+r=\"%d\" \
+fill=\"%s\" \
+stroke=\"%s\" \
+%s \
+/>\n",
             cx,
             cy,
             r,

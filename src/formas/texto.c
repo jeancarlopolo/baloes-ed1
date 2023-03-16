@@ -6,7 +6,7 @@ struct texto
     int id;
     double x;
     double y;
-    char *conteudo;
+    char conteudo[50];
     char *corBorda;
     char *corPreenchimento;
     char *ancora;
@@ -27,7 +27,7 @@ Texto criaTexto(int id, double x, double y, char *corBorda, char *corPreenchimen
     t->corBorda = corBorda;
     t->corPreenchimento = corPreenchimento;
     t->ancora = ancora;
-    t->conteudo = conteudo;
+    strncpy(t->conteudo, conteudo, 50);
     t->rotacao = 0;
     return t;
 }
@@ -104,7 +104,7 @@ void setTextoAncora(Texto t, char *ancora)
 
 void setTextoConteudo(Texto t, char *conteudo)
 {
-    ((struct texto *)t)->conteudo = conteudo;
+    strncpy(((struct texto *)t)->conteudo, conteudo, 50);
 }
 
 void liberarTexto(Texto t)

@@ -76,6 +76,15 @@ Posic insertLst(Lista L, Item info)
     struct lista *lst = (struct lista *)L;
     struct elemento *elem = (struct elemento *)malloc(sizeof(struct elemento));
 
+    if (lst->inicio == NULL)
+    {
+        lst->inicio = elem;
+        elem->item = info;
+        elem->proximo = NIL;
+        elem->anterior = NIL;
+        return elem;
+    }
+    
     struct elemento *aux = lst->inicio;
     for (; aux->proximo != NULL; aux = aux->proximo)
     {
@@ -239,19 +248,14 @@ Iterador createIterador(Lista L, bool reverso)
     return iter;
 }
 
-bool isIteratorEmpty(Lista L, Iterador it)
+bool isIteratorEmpty(Iterador it)
 {
     if (it == NULL)
         return true;
     struct iterador *iter = (struct iterador *)it;
-    if (iter->reverso)
-    {
-        return iter->atual == getFirstLst(L);
-    }
-    else
-    {
-        return iter->atual == getLastLst(L);
-    }
+    if (iter->atual == NULL)
+        return true;
+    return false;
 }
 
 Item getIteratorNext(Iterador it)
@@ -281,7 +285,7 @@ Lista map(Lista L, Apply f)
     Lista novaLst = createLst(-1);
     Iterador it = createIterador(L, false);
 
-    while (!isIteratorEmpty(L, it))
+    while (!isIteratorEmpty(it))
     {
         Item info = getIteratorNext(it);
         Item novoInfo = f(info);
@@ -298,7 +302,7 @@ Lista filter(Lista L, Check f)
     Lista novaLst = createLst(-1);
     Iterador it = createIterador(L, false);
 
-    while (!isIteratorEmpty(L, it))
+    while (!isIteratorEmpty(it))
     {
         Item info = getIteratorNext(it);
         if (f(info))
@@ -316,7 +320,7 @@ void fold(Lista L, ApplyClosure f, Clausura c)
 {
     Iterador it = createIterador(L, false);
 
-    while (!isIteratorEmpty(L, it))
+    while (!isIteratorEmpty(it))
     {
         Item info = getIteratorNext(it);
         f(info, c);
