@@ -49,6 +49,6 @@ pack: $(objects)
 	rm -f ../$(ALUNO).zip
 	echo $(ALUNO)
 	date >> .entrega
-	cd ..; zip $(ALUNO).zip -r src/ -x "*.o" "*.geo" "*.qry" "src/ted"
+	cd ..; zip $(ALUNO).zip -r LEIA-ME.txt src/ -x "*.o" "*.geo" "*.qry" "src/ted"
 
 .PRECIOUS: %.o
