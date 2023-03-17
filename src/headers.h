@@ -9,6 +9,7 @@
 
 #include "estruturas/fila.h"
 #include "estruturas/lista.h"
+#include "estruturas/clausuras.h"
 
 #include "formas/circulo.h"
 #include "formas/retangulo.h"

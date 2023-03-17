@@ -3,7 +3,11 @@
 
 #include <stdio.h>
 
-/** Conjunto de funções para facilitar a criação de arquivos SVG. */
+/** Conjunto de funções para facilitar a criação de arquivos SVG.
+
+O parâmetro style é uma string que pode ser usada para definir
+estilos CSS. Por exemplo, "stroke-width: 2px; stroke: #000000;"
+*/
 
 /** Inicia um arquivo SVG. */
 void svg_init(FILE *svg);
@@ -51,6 +55,5 @@ void svg_line(FILE *svg,
               int y2,
               char *stroke,
               char *style);
-
 
 #endif

@@ -2,60 +2,6 @@
 
 #define MAX 150
 
-struct clausuraSvg
-{
-    FILE *svg;
-};
-
-void escreveSvg(Item item, Clausura c)
-{
-    enum TipoForma tipo = getTipoForma(item);
-    switch (tipo)
-    {
-    case CIRCULO:
-        svg_circle(((struct clausuraSvg *)c)->svg,
-                   getCirculoX(item),
-                   getCirculoY(item),
-                   getCirculoR(item),
-                   getCirculoCorp(item),
-                   getCirculoCorb(item),
-                   NULL);
-        break;
-    case RETANGULO:
-        svg_rect(((struct clausuraSvg *)c)->svg,
-                 getRetanguloX(item),
-                 getRetanguloY(item),
-                 getRetanguloLargura(item),
-                 getRetanguloAltura(item),
-                 getRetanguloCorPreenchimento(item),
-                 getRetanguloCorBorda(item),
-                 NULL);
-        break;
-    case TEXTO:
-        svg_text(((struct clausuraSvg *)c)->svg,
-                 getTextoX(item),
-                 getTextoY(item),
-                 getTextoConteudo(item),
-                 getTextoCorPreenchimento(item),
-                 getTextoCorBorda(item),
-                 getTextoRotacao(item),
-                 textoFamilia,
-                 textoPeso,
-                 textoTamanho,
-                 NULL);
-        break;
-    case LINHA:
-        svg_line(((struct clausuraSvg *)c)->svg,
-                 getLinhaX1(item),
-                 getLinhaY1(item),
-                 getLinhaX2(item),
-                 getLinhaY2(item),
-                 getLinhaCor(item),
-                 NULL);
-        break;
-    }
-}
-
 int main(int argc, char *argv[])
 {
     Path pathEntrada = path_create("");
@@ -63,7 +9,7 @@ int main(int argc, char *argv[])
     Path nomeGeo, nomeQry;
     FILE *qry;
     char pathGeo[MAX], pathQry[MAX], nomeSvg[MAX], nomeTxt[MAX];
-    struct clausuraSvg c;
+    Clausura csvg;
     for (int i = 0; i < argc; i++)
     {
         if (strcmp(argv[i], "-e") == 0)
@@ -109,7 +55,7 @@ int main(int argc, char *argv[])
     Lista db = createLst(-1);
     FILE *geo = fopen(pathGeo, "r");
     FILE *svg = fopen(nomeSvg, "w");
-    c.svg = svg;
+    csvg = criaClausuraSvg(svg);
     svg_init(svg);
     ler_geo(geo, db);
     if (strcmp(path_get_filename(nomeQry), "") == 0)
@@ -121,7 +67,7 @@ int main(int argc, char *argv[])
         qry = fopen(pathQry, "r");
     }
     // printa lista no svg
-    fold(db, escreveSvg, &c);
+    fold(db, escreveSvg, csvg);
     svg_finalize(svg);
 
     fclose(geo);

@@ -116,3 +116,28 @@ void ler_geo(FILE *geo, Lista *lista)
 		}
 	}
 }
+
+void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista)
+{
+	char *palavras[MAX];
+	int n;
+	char **ponteiro = NULL;
+	char texto[MAX];
+	// enquanto não chegar ao final do arquivo
+	while (true)
+	{
+		// lê uma linha do arquivo
+		ler_linha(qry, palavras, &n);
+		if (n > 0)
+		{
+			if (strcmp(palavras[0], "mv") == 0)
+			{
+				
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+}
