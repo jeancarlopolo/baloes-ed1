@@ -10,13 +10,8 @@ regiões vazias ou pouco relevantes. Por isso, a base avalia cada foto e atribui
 denota seu grau de importância: quanto maior o número, maior a importância.
 
 anotações pra mim mesmo:
-- vou ter que dar um jeito de empurrar as fotos geradas usando static provavelmente
-- seno e cosseno pra calcular lugar da bomba + sai DEBAIXO (y positivo pq é svg) do texto a bomba
-- perguntar o que é a posição relativa do elemento à borda da foto no comando tf
-- tem toda a putaria da pontuação ainda
 - clones
 - testar caminho relativo no ted 
-
 
 - lendo geo ok
 - colocando na lista ok
@@ -53,3 +48,5 @@ remover elementos da lista principal
 clonar certos elementos
 
 ESTOU FAZENDO ELE PERCORRER AS FILAS DO BALAO ATINGIDO PELO MISSIL PRA CLONAR OS ELEMENTOS DAS FOTOS NAO ENVIADAS
+
+nao estou entendendo filas e nem como vou percorrer os elementos dela pra clonar
