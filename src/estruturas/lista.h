@@ -132,20 +132,20 @@ void killIterator(Iterador it);
  ** High-order functions
  **/
 
-typedef Item (*Apply)(Item item);
-typedef bool (*Check)(Item item);
+typedef Item (*Apply)(Item item, Clausura c);
+typedef bool (*Check)(Item item, Clausura c);
 typedef void (*ApplyClosure)(Item item, Clausura c);
 
 /** Cria uma nova lista. Aplica a funcao f a cada item de L
     e insere o resultado na nova lista.
  */
-Lista map(Lista L, Apply f);
+Lista map(Lista L, Apply f, Clausura c);
 
 /**
    Cria uma nova lista contendo os itens de L para os quais a
    invocacao da funcao f retornar verdeira.
  */
-Lista filter(Lista L, Check f);
+Lista filter(Lista L, Check f, Clausura c);
 
 /**
    Aplica a funcao f a cada elemento de L, possivelmente, atualizando

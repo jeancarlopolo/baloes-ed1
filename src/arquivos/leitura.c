@@ -117,7 +117,7 @@ void ler_geo(FILE *geo, Lista *lista)
 	}
 }
 
-void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista)
+void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 {
 	char *palavras[MAX];
 	int n;

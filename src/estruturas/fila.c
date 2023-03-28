@@ -1,115 +1,117 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "fila.h"
-#include "lista.h"
+#include <stdlib.h>
 
-struct no
+struct fila
 {
-    void *elemento;
-};
-
-struct fila_circular
-{
-    struct no *elementos; /* vetor de elementos da fila */
-    int tamanho;          /* tamanho máximo da fila */
-    int inicio;           /* índice do elemento no início da fila */
-    int fim;              /* índice do elemento no final da fila */
-    int quantidade;       /* número de elementos na fila */
+    void **elementos;
+    int tamanho;
+    int quantidade;
+    int inicio;
+    int fim;
 };
 
 Fila criaFila(int tamanho)
 {
-    struct fila_circular *fila = (struct fila_circular *)malloc(sizeof(struct fila_circular));
-
-    fila->elementos = (struct no *)malloc(tamanho * sizeof(struct no));
-
+    struct fila *fila = (struct fila *)malloc(sizeof(struct fila));
+    fila->elementos = (void **)malloc(tamanho * sizeof(void *));
     fila->tamanho = tamanho;
-    fila->inicio = 0;
-    fila->fim = -1;
     fila->quantidade = 0;
-
+    fila->inicio = 0;
+    fila->fim = 0;
     return fila;
 }
 
 bool insereFila(Fila fila, void *elemento)
 {
-    struct fila_circular *fc = (struct fila_circular *)fila;
-
-    if (fc->quantidade == fc->tamanho)
+    struct fila *f = (struct fila *)fila;
+    if (isCheiaFila(fila))
     {
         return false;
     }
-
-    fc->fim = (fc->fim + 1) % fc->tamanho;
-
-    fc->elementos[fc->fim].elemento = elemento;
-
-    fc->quantidade++;
-
+    f->elementos[f->fim] = elemento;
+    f->fim = (f->fim + 1) % f->tamanho;
+    f->quantidade++;
     return true;
 }
 
 bool removeFila(Fila fila)
 {
-    struct fila_circular *fc = (struct fila_circular *)fila;
-
-    if (fc->quantidade == 0)
+    struct fila *f = (struct fila *)fila;
+    if (isVaziaFila(fila))
     {
         return false;
     }
-
-    fc->elementos[fc->inicio].elemento = NULL;
-
-    fc->inicio = (fc->inicio + 1) % fc->tamanho;
-
-    fc->quantidade--;
-
+    f->inicio = (f->inicio + 1) % f->tamanho;
+    f->quantidade--;
     return true;
 }
 
-void *inicioFila(Fila fila)
+void *getInicioFila(Fila fila)
 {
-    struct fila_circular *fc = (struct fila_circular *)fila;
-
-    if (fc->quantidade == 0)
+    struct fila *f = (struct fila *)fila;
+    if (isVaziaFila(fila))
     {
         return NULL;
     }
-
-    return fc->elementos[fc->inicio].elemento;
+    return f->elementos[f->inicio];
 }
 
-void *finalFila(Fila fila)
+void *getFimFila(Fila fila)
 {
-    struct fila_circular *fc = (struct fila_circular *)fila;
-
-    if (fc->quantidade == 0)
+    struct fila *f = (struct fila *)fila;
+    if (isVaziaFila(fila))
     {
         return NULL;
     }
-
-    return fc->elementos[fc->fim].elemento;
+    return f->elementos[f->fim];
 }
 
-int tamanhoFila(Fila fila)
+void *getProximoFila(Fila fila, void *elemento)
 {
-    struct fila_circular *fc = (struct fila_circular *)fila;
+    struct fila *f = (struct fila *)fila;
+    if (isVaziaFila(fila))
+    {
+        return NULL;
+    }
+    int i = f->inicio;
+    while (i != f->fim)
+    {
+        if (f->elementos[i] == elemento)
+        {
+            return f->elementos[(i + 1) % f->tamanho];
+        }
+        i = (i + 1) % f->tamanho;
+    }
+    return NULL;
+}
 
-    return fc->quantidade;
+int getTamanhoFila(Fila fila)
+{
+    struct fila *f = (struct fila *)fila;
+    return f->tamanho;
+}
+
+int getQuantidadeFila(Fila fila)
+{
+    struct fila *f = (struct fila *)fila;
+    return f->quantidade;
+}
+
+bool isVaziaFila(Fila fila)
+{
+    struct fila *f = (struct fila *)fila;
+    return f->quantidade == 0;
+}
+
+bool isCheiaFila(Fila fila)
+{
+    struct fila *f = (struct fila *)fila;
+    return f->quantidade == f->tamanho;
 }
 
 void destroiFila(Fila fila)
 {
-    struct fila_circular *fc = (struct fila_circular *)fila;
-
-    for (int i = 0; i < fc->tamanho; i++)
-    {
-        if (fc->elementos[i].elemento != NULL)
-        {
-            killLst(fc->elementos[i].elemento);
-        }
-    }
-
-    free(fc->elementos);
-    free(fc);
+    struct fila *f = (struct fila *)fila;
+    free(f->elementos);
+    free(f);
 }

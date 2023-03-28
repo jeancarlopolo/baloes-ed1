@@ -2,9 +2,13 @@
 #define _TEXTO_H_
 
 #include "tipos.h"
-#include "string.h"
+#include <string.h>
+#include <stdbool.h>
+#include "../estruturas/lista.h"
+#include "../estruturas/fila.h"
 
-/** Um texto possui id, x, y, cor de borda, cor de preenchimento, âncora e conteúdo.*/
+// Um texto possui id, x, y, cor de borda, cor de preenchimento, âncora e conteúdo.
+// Além disso, o texto v_O_v representa um balão e o texto |-T-| representa um caça.
 typedef void *Texto;
 
 /** Variáveis globais com o estilo atual do texto*/
@@ -69,5 +73,36 @@ void rotacionaTexto(Texto t, double theta);
 
 /** Libera a memória alocada para o texto. */
 void liberaTexto(Texto t);
+
+//--------------------------------------------------------------------------------------------
+
+// Funções referentes aos balões e caças
+// As funções que retornam bool retornam true se a operação foi bem sucedida e false caso contrário
+
+/** Define os parâmetros de foco de um balão*/
+bool setBalaoParametros(Texto t, double r, double p, double h);
+
+/** Retorna o raio de foco de um balão*/
+double getBalaoR(Texto t);
+
+/** Retorna a profundidade de um balão*/
+double getBalaoP(Texto t);
+
+/** Retorna o alcance da nitidez de um balão*/
+double getBalaoH(Texto t);
+
+/** Retorna a fila i de um balão*/
+Fila getBalaoFilaI(Texto t, int i);
+
+
+
+/** Atualiza a lista de alvos acertados de um caça com um novo elemento. */
+bool cacaAcertou(Texto t, int i);
+
+/** Aumenta a quantidade de disparos de um caça em 1*/
+bool cacaDisparou(Texto t);
+
+/** Retorna a quantidade de disparos e a lista de acertos de um caça*/
+bool getCacaInfo(Texto t, int *disparos, Lista *acertos);
 
 #endif

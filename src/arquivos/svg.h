@@ -45,6 +45,7 @@ void svg_text(FILE *svg,
               char *family,
               char *weight,
               char *size,
+              char *ancora,
               char *style);
 
 /** Escreve uma linha no arquivo SVG. */

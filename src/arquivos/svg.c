@@ -51,6 +51,7 @@ void svg_text(FILE *svg,
               char *family,
               char *weight,
               char *size,
+              char *ancora,
               char *style)
 {
     style = style == NULL ? "" : style;
@@ -63,6 +64,7 @@ transform=\"rotate(%f %d %d)\" \
 font-family=\"%s\" \
 font-weight=\"%s\" \
 font-size=\"%s\" \
+text-anchor=\"%s\" \
 %s \
 >%s</text>\n",
             x,
@@ -75,6 +77,7 @@ font-size=\"%s\" \
             family,
             weight,
             size,
+            ancora,
             style,
             text);
 }

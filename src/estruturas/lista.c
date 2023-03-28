@@ -1,8 +1,6 @@
 #include "lista.h"
-#include "../formas/circulo.h"
-#include "../formas/retangulo.h"
-#include "../formas/texto.h"
-#include "../formas/linha.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 struct elemento
 {
@@ -225,8 +223,6 @@ void killLst(Lista L)
     }
 
     free(lst);
-
-    L = NULL;
 }
 
 Iterador createIterador(Lista L, bool reverso)
@@ -280,7 +276,7 @@ void killIterator(Iterador it)
     free(it);
 }
 
-Lista map(Lista L, Apply f)
+Lista map(Lista L, Apply f, Clausura c)
 {
     Lista novaLst = createLst(-1);
     Iterador it = createIterador(L, false);
@@ -288,7 +284,7 @@ Lista map(Lista L, Apply f)
     while (!isIteratorEmpty(it))
     {
         Item info = getIteratorNext(it);
-        Item novoInfo = f(info);
+        Item novoInfo = f(info, c);
         insertLst(novaLst, novoInfo);
     }
 
@@ -297,7 +293,7 @@ Lista map(Lista L, Apply f)
     return novaLst;
 }
 
-Lista filter(Lista L, Check f)
+Lista filter(Lista L, Check f, Clausura c)
 {
     Lista novaLst = createLst(-1);
     Iterador it = createIterador(L, false);
@@ -305,7 +301,7 @@ Lista filter(Lista L, Check f)
     while (!isIteratorEmpty(it))
     {
         Item info = getIteratorNext(it);
-        if (f(info))
+        if (f(info, c))
         {
             insertLst(novaLst, info);
         }

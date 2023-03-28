@@ -18,6 +18,6 @@ void ler_linha(FILE *arq, char *palavras[], int *n);
 void ler_geo(FILE *geo, Lista *lista);
 
 /** Função que lê o arquivo qry e chama as funções de remoção e alteração de elementos na lista. */
-void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista);
+void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char* nomeSvg);
 
 #endif
