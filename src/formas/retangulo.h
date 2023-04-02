@@ -33,6 +33,9 @@ double getRetanguloY(Retangulo r);
 /** Retorna a área do retângulo. */
 double getRetanguloArea(Retangulo r);
 
+/** Retorna a rotação do retângulo. */
+double getRetanguloRotacao(Retangulo r);
+
 /** Define o id do retângulo. */
 void setRetanguloId(Retangulo r, int id);
 
@@ -53,6 +56,9 @@ void setRetanguloX(Retangulo r, double x);
 
 /** Define o y do retângulo. */
 void setRetanguloY(Retangulo r, double y);
+
+/** Define a rotação do retângulo. */
+void setRetanguloRotacao(Retangulo r, double rotacao);
 
 /** Libera a memória alocada para o retângulo. */
 void liberaRetangulo(Retangulo r);

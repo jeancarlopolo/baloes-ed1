@@ -13,12 +13,10 @@ typedef void *Texto;
 
 /** Variáveis globais com o estilo atual do texto*/
 
-extern char *textoFamilia;
-extern char *textoPeso;
-extern char *textoTamanho;
+ 
 
 /** Cria um texto com os parâmetros dados. */
-Texto criaTexto(int id, double x, double y, char *corBorda, char *corPreenchimento, char *ancora, char *conteudo);
+Texto criaTexto(int id, double x, double y, char *corBorda, char *corPreenchimento, char *ancora, char *conteudo, char *textoFamilia, char *textoPeso, char *textoTamanho);
 
 /** Retorna o id do texto. */
 int getTextoId(Texto t);
@@ -40,6 +38,15 @@ char *getTextoAncora(Texto t);
 
 /** Retorna o conteúdo do texto. */
 char *getTextoConteudo(Texto t);
+
+/** Retorna a família do texto. */
+char *getTextoFamilia(Texto t);
+
+/** Retorna o peso do texto. */
+char *getTextoPeso(Texto t);
+
+/** Retorna o tamanho do texto. */
+char *getTextoTamanho(Texto t);
 
 /** Retorna o número de caracteres do texto. */
 int getTextoLength(Texto t);
@@ -67,6 +74,15 @@ void setTextoAncora(Texto t, char *ancora);
 
 /** Define o conteúdo do texto. */
 void setTextoConteudo(Texto t, char *conteudo);
+
+/** Define a família do texto. */
+void setTextoFamilia(Texto t, char *textoFamilia);
+
+/** Define o peso do texto. */
+void setTextoPeso(Texto t, char *textoPeso);
+
+/** Define o tamanho do texto. */
+void setTextoTamanho(Texto t, char *textoTamanho);
 
 /** Rotaciona o texto em torno do ponto (x, y) em um ângulo de theta graus. */
 void rotacionaTexto(Texto t, double theta);

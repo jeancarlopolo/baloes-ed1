@@ -1,31 +1,27 @@
 #include "fila.h"
 #include <stdlib.h>
 
-struct fila
-{
-    void **elementos;
+struct fila {
     int tamanho;
     int quantidade;
     int inicio;
     int fim;
+    Item *elementos;
 };
 
-Fila criaFila(int tamanho)
-{
-    struct fila *fila = (struct fila *)malloc(sizeof(struct fila));
-    fila->elementos = (void **)malloc(tamanho * sizeof(void *));
-    fila->tamanho = tamanho;
-    fila->quantidade = 0;
-    fila->inicio = 0;
-    fila->fim = 0;
-    return fila;
+Fila criaFila(int tamanho) {
+    struct fila *f = malloc(sizeof(struct fila));
+    f->tamanho = tamanho;
+    f->quantidade = 0;
+    f->inicio = 0;
+    f->fim = 0;
+    f->elementos = malloc(tamanho * sizeof(Item));
+    return f;
 }
 
-bool insereFila(Fila fila, void *elemento)
-{
-    struct fila *f = (struct fila *)fila;
-    if (isCheiaFila(fila))
-    {
+bool insereFila(Fila fila, Item elemento) {
+    struct fila *f = (struct fila *) fila;
+    if (isCheiaFila(f)) {
         return false;
     }
     f->elementos[f->fim] = elemento;
@@ -34,11 +30,9 @@ bool insereFila(Fila fila, void *elemento)
     return true;
 }
 
-bool removeFila(Fila fila)
-{
-    struct fila *f = (struct fila *)fila;
-    if (isVaziaFila(fila))
-    {
+bool removeFila(Fila fila) {
+    struct fila *f = (struct fila *) fila;
+    if (isVaziaFila(f)) {
         return false;
     }
     f->inicio = (f->inicio + 1) % f->tamanho;
@@ -46,72 +40,44 @@ bool removeFila(Fila fila)
     return true;
 }
 
-void *getInicioFila(Fila fila)
-{
-    struct fila *f = (struct fila *)fila;
-    if (isVaziaFila(fila))
-    {
+Item getInicioFila(Fila fila) {
+    struct fila *f = (struct fila *) fila;
+    if (isVaziaFila(f)) {
         return NULL;
     }
     return f->elementos[f->inicio];
 }
 
-void *getFimFila(Fila fila)
-{
-    struct fila *f = (struct fila *)fila;
-    if (isVaziaFila(fila))
-    {
+Item getFimFila(Fila fila) {
+    struct fila *f = (struct fila *) fila;
+    if (isVaziaFila(f)) {
         return NULL;
     }
     return f->elementos[f->fim];
 }
 
-void *getProximoFila(Fila fila, void *elemento)
-{
-    struct fila *f = (struct fila *)fila;
-    if (isVaziaFila(fila))
-    {
-        return NULL;
-    }
-    int i = f->inicio;
-    while (i != f->fim)
-    {
-        if (f->elementos[i] == elemento)
-        {
-            return f->elementos[(i + 1) % f->tamanho];
-        }
-        i = (i + 1) % f->tamanho;
-    }
-    return NULL;
-}
-
-int getTamanhoFila(Fila fila)
-{
-    struct fila *f = (struct fila *)fila;
+int getTamanhoFila(Fila fila) {
+    struct fila *f = (struct fila *) fila;
     return f->tamanho;
 }
 
-int getQuantidadeFila(Fila fila)
-{
-    struct fila *f = (struct fila *)fila;
+int getQuantidadeFila(Fila fila) {
+    struct fila *f = (struct fila *) fila;
     return f->quantidade;
 }
 
-bool isVaziaFila(Fila fila)
-{
-    struct fila *f = (struct fila *)fila;
+bool isVaziaFila(Fila fila) {
+    struct fila *f = (struct fila *) fila;
     return f->quantidade == 0;
 }
 
-bool isCheiaFila(Fila fila)
-{
-    struct fila *f = (struct fila *)fila;
+bool isCheiaFila(Fila fila) {
+    struct fila *f = (struct fila *) fila;
     return f->quantidade == f->tamanho;
 }
 
-void destroiFila(Fila fila)
-{
-    struct fila *f = (struct fila *)fila;
+void destroiFila(Fila fila) {
+    struct fila *f = (struct fila *) fila;
     free(f->elementos);
     free(f);
 }

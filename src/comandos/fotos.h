@@ -5,7 +5,6 @@
 #include "../estruturas/fila.h"
 #include "../estruturas/clausuras.h"
 #include "../estruturas/check.h"
-#include "../estruturas/map.h"
 #include "../arquivos/svg.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,14 +17,17 @@ typedef void* Foto;
 
 // Função que cria uma foto
 // (a lista é o banco de dados geral)
-Foto tirarFoto(Lista lista, FILE *svg, Texto balao);
+Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt);
 
 // Função que imprime uma foto
 // (a lista é a foto tirada)
-void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx);
+void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao);
 
-// Verifica se a foto foi enviada para a base
+// Verifica se a foto foi de base
 bool fotoEnviada(Foto f);
+
+// Retorna os elementos em si da foto
+Lista getElementosFoto(Foto f);
 
 // Função que libera a memória de uma foto
 void liberaFoto(Foto f);

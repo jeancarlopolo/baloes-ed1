@@ -9,6 +9,7 @@ struct circulo
     double r;
     char *corBorda;
     char *corPreenchimento;
+    double rotacao;
 };
 
 Circulo criaCirculo(int id, double x, double y, double r, char* corb, char* corp)
@@ -95,4 +96,14 @@ void liberaCirculo(Circulo c)
 double getCirculoArea(Circulo c)
 {
     return PI * pow(((struct circulo *)c)->r, 2);
+}
+
+void setCirculoRotacao(Circulo c, double rotacao)
+{
+    ((struct circulo *)c)->rotacao = rotacao;
+}
+
+double getCirculoRotacao(Circulo c)
+{
+    return ((struct circulo *)c)->rotacao;
 }

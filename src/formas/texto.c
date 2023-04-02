@@ -1,7 +1,6 @@
 #include "texto.h"
 #include "../estruturas/lista.h"
 
-
 struct texto
 {
     enum TipoForma tipo;
@@ -16,6 +15,9 @@ struct texto
     char *corPreenchimento;
     char *ancora;
     double rotacao;
+    char *textoFamilia;
+    char *textoPeso;
+    char *textoTamanho;
 };
 
 struct balao
@@ -32,11 +34,7 @@ struct caca
     Lista *idsAcertados;
 };
 
-char *textoFamilia = "sans (sans-serif)";
-char *textoPeso = "normal";
-char *textoTamanho = "20px";
-
-Texto criaTexto(int id, double x, double y, char *corBorda, char *corPreenchimento, char *ancora, char *conteudo)
+Texto criaTexto(int id, double x, double y, char *corBorda, char *corPreenchimento, char *ancora, char *conteudo, char *textoFamilia, char *textoPeso, char *textoTamanho)
 {
     struct texto *t = (struct texto *)malloc(sizeof(struct texto));
     t->tipo = TEXTO;
@@ -75,6 +73,9 @@ Texto criaTexto(int id, double x, double y, char *corBorda, char *corPreenchimen
         t->tipoVeiculo = NENHUM;
     }
     t->rotacao = 0;
+    t->textoFamilia = textoFamilia;
+    t->textoPeso = textoPeso;
+    t->textoTamanho = textoTamanho;
     return t;
 }
 
@@ -118,6 +119,21 @@ int getTextoLength(Texto t)
     return strlen(((struct texto *)t)->conteudo);
 }
 
+char *getTextoFamilia(Texto t)
+{
+    return ((struct texto *)t)->textoFamilia;
+}
+
+char *getTextoPeso(Texto t)
+{
+    return ((struct texto *)t)->textoPeso;
+}
+
+char *getTextoTamanho(Texto t)
+{
+    return ((struct texto *)t)->textoTamanho;
+}
+
 void setTextoId(Texto t, int id)
 {
     ((struct texto *)t)->id = id;
@@ -153,13 +169,24 @@ void setTextoConteudo(Texto t, char *conteudo)
     strncpy(((struct texto *)t)->conteudo, conteudo, 50);
 }
 
+void setTextoFamilia(Texto t, char *textoFamilia)
+{
+    ((struct texto *)t)->textoFamilia = textoFamilia;
+}
+
+void setTextoPeso(Texto t, char *textoPeso)
+{
+    ((struct texto *)t)->textoPeso = textoPeso;
+}
+
+void setTextoTamanho(Texto t, char *textoTamanho)
+{
+    ((struct texto *)t)->textoTamanho = textoTamanho;
+}
+
 void liberaTexto(Texto t)
 {
     struct texto *texto = (struct texto *)t;
-    free(texto->corBorda);
-    free(texto->corPreenchimento);
-    free(texto->ancora);
-    free(texto->conteudo);
     if (texto->tipoVeiculo == BALAO)
     {
         for (int i = 0; i < 9; i++)
@@ -257,9 +284,24 @@ bool getCacaInfo(Texto t, int *disparos, Lista *acertos)
     struct texto *texto = (struct texto *)t;
     if (texto->tipoVeiculo == CACA)
     {
-        *disparos = texto->cacaDados->disparosEfetuados;
-        *acertos = texto->cacaDados->idsAcertados;
+        int disparosEfetuados = texto->cacaDados->disparosEfetuados; // copia para evitar problemas de concorrencia
+        if (disparos != NULL)
+            *disparos = disparosEfetuados;
+        if (acertos != NULL)
+            *acertos = texto->cacaDados->idsAcertados;
         return true;
     }
     return false;
+}
+
+Fila getBalaoFilaI(Texto t, int i)
+{
+    struct texto *texto = (struct texto *)t;
+    if (texto->tipoVeiculo == BALAO)
+    {
+        if (isVaziaFila(texto->balaoDados->filaFotos[i]))
+            return NULL;
+        return texto->balaoDados->filaFotos[i];
+    }
+    return NULL;
 }

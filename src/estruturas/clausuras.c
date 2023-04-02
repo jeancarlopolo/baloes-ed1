@@ -82,9 +82,9 @@ void escreveSvg(Item item, Clausura c)
                  getTextoCorPreenchimento(item),
                  getTextoCorBorda(item),
                  getTextoRotacao(item),
-                 textoFamilia,
-                 textoPeso,
-                 textoTamanho,
+                 getTextoFamilia(item),
+                 getTextoPeso(item),
+                 getTextoTamanho(item),
                  getTextoAncora(item),
                  NULL);
         break;

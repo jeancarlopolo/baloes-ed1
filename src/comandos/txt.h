@@ -12,4 +12,7 @@
 // Escreve no arquivo de texto os atributos de uma forma
 void reportarAtributos(void* forma, FILE *txt);
 
+// Escreve no arquivo de texto os atributos de uma forma (recebe o endereço de um elemento da lista)
+void reportarAtributosElemento(void* elemento, FILE *txt);
+
 #endif

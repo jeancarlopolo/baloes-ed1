@@ -30,6 +30,9 @@ char* getLinhaCor(Linha l);
 /** Retorna o comprimento da linha. */
 double getLinhaComprimento(Linha l);
 
+/** Retorna a rotação da linha*/
+double getLinhaRotacao(Linha l);
+
 /** Define o id da linha. */
 void setLinhaId(Linha l, int id);
 
@@ -47,6 +50,9 @@ void setLinhaY2(Linha l, double y2);
 
 /** Define a cor da linha. */
 void setLinhaCor(Linha l, char *cor);
+
+/** Define a rotação da linha*/
+void setLinhaRotacao(Linha l, double rotacao);
 
 /** Libera a memória alocada para a linha. */
 void liberaLinha(Linha l);

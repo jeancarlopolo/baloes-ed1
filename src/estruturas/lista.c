@@ -82,7 +82,7 @@ Posic insertLst(Lista L, Item info)
         elem->anterior = NIL;
         return elem;
     }
-    
+
     struct elemento *aux = lst->inicio;
     for (; aux->proximo != NULL; aux = aux->proximo)
     {
@@ -128,8 +128,6 @@ void removeLst(Lista L, Posic p)
         elem->anterior->proximo = elem->proximo;
         elem->proximo->anterior = elem->anterior;
     }
-
-    free(elem);
 }
 
 Item getLst(Posic p)
@@ -211,7 +209,7 @@ void killLst(Lista L)
 {
     if (L == NULL)
         return;
-    
+
     struct lista *lst = (struct lista *)L;
     struct elemento *elem = lst->inicio;
 
@@ -257,6 +255,8 @@ bool isIteratorEmpty(Iterador it)
 Item getIteratorNext(Iterador it)
 {
     struct iterador *iter = (struct iterador *)it;
+    if (isIteratorEmpty(iter))
+        return NULL;
     struct elemento *elem = (struct elemento *)iter->atual;
 
     if (iter->reverso)
@@ -269,6 +269,23 @@ Item getIteratorNext(Iterador it)
     }
 
     return elem->item;
+}
+
+Posic getIteratorNextPosic(Iterador it)
+{
+    struct iterador *iter = (struct iterador *)it;
+    if (isIteratorEmpty(iter))
+        return NULL;
+    struct elemento *elem = (struct elemento *)iter->atual;
+    if (iter->reverso)
+    {
+        iter->atual = elem->anterior;
+    }
+    else
+    {
+        iter->atual = elem->proximo;
+    }
+    return iter->atual;
 }
 
 void killIterator(Iterador it)
@@ -323,4 +340,19 @@ void fold(Lista L, ApplyClosure f, Clausura c)
     }
 
     killIterator(it);
+}
+
+Posic insertPosicLst(Lista L, Posic p, Lista ListaP)
+{
+    struct lista *lst = (struct lista *)L;
+    struct elemento *final = (struct elemento *)getLastLst(lst);
+    struct elemento *elemento = (struct elemento *)p;
+
+    final->proximo = elemento;
+    elemento->anterior = final;
+
+    if (ListaP != NULL)
+        free(ListaP);
+
+    return elemento;
 }

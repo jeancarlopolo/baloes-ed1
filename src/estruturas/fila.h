@@ -2,6 +2,7 @@
 #define _FILA_CIRCULAR_ESTATICA_H
 
 #include <stdbool.h>
+#include "lista.h"
 
 // Estrutura de dados da fila circular estática
 typedef void *Fila;
@@ -10,19 +11,16 @@ typedef void *Fila;
 Fila criaFila(int tamanho);
 
 // Insere um elemento na fila
-bool insereFila(Fila fila, void *elemento);
+bool insereFila(Fila fila, Item elemento);
 
 // Remove um elemento da fila
 bool removeFila(Fila fila);
 
 // Retorna o elemento do início da fila
-void *getInicioFila(Fila fila);
+Item getInicioFila(Fila fila);
 
 // Retorna o elemento do fim da fila
-void *getFimFila(Fila fila);
-
-// Retorna o próximo elemento da fila
-void *getProximoFila(Fila fila, void *elemento);
+Item getFimFila(Fila fila);
 
 // Retorna o tamanho máximo da fila
 int getTamanhoFila(Fila fila);

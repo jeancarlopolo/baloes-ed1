@@ -6,6 +6,7 @@
 #include "../formas/circulo.h"
 #include "../formas/retangulo.h"
 #include "../formas/linha.h"
+#include "../comandos/txt.h"
 
 
 // Funções relativas a bombas lançadas por caças
@@ -24,6 +25,6 @@ void posicaoBomba(double xcaca, double ycaca, double rotacao, double distancia,
 
 // Explode a bomba
 // dx é a distância que os elementos clonados devem ser transladados
-void explodeBomba(Lista db, double xbomba, double ybomba, enum tipoBomba tipo, double dx, Texto caca);
+void explodeBomba(Lista db, double xbomba, double ybomba, enum tipoBomba tipo, double dx, Texto caca, int j, FILE *txt, FILE *svg);
 
 #endif

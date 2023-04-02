@@ -51,6 +51,12 @@ void setCirculoCorb(Circulo c, char* corb);
 /** Define a cor de preenchimento do círculo. */
 void setCirculoCorp(Circulo c, char* corp);
 
+/** Define a rotação do círculo. */
+void setCirculoRotacao(Circulo c, double rotacao);
+
+/** Retorna a rotação do círculo. */
+double getCirculoRotacao(Circulo c);
+
 /** Libera a memória alocada para o círculo. */
 void liberaCirculo(Circulo c);
 

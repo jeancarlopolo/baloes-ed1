@@ -49,4 +49,6 @@ clonar certos elementos
 
 ESTOU FAZENDO ELE PERCORRER AS FILAS DO BALAO ATINGIDO PELO MISSIL PRA CLONAR OS ELEMENTOS DAS FOTOS NAO ENVIADAS
 
-nao estou entendendo filas e nem como vou percorrer os elementos dela pra clonar
+adicionar rotacao em todas as formas, e dar um jeito de remover os elementos filtrados
+
+estilos textos sao individuais por texto

@@ -14,7 +14,6 @@
 #include "estruturas/lista.h"
 #include "estruturas/clausuras.h"
 #include "estruturas/check.h"
-#include "estruturas/map.h"
 
 #include "formas/circulo.h"
 #include "formas/retangulo.h"

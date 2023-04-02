@@ -62,6 +62,10 @@ void removeLst(Lista L, Posic p);
     p deve indicar um elemento existente em L. */
 Item getLst(Posic p);
 
+/** Anexa o elemento p na lista L. Pode ser usado para
+    anexar uma lista a outra. Nesse caso, também recebe a outra lista para liberar sua memória. */
+Posic insertPosicLst(Lista L, Posic p, Lista ListaP);
+
 /** Insere o item info na posicao imediatamente anterior ao
 item indicado por p. O comprimento da lista e' acrescido de 1 elemento.
 Retorna um indicador para o elemento acrescentado. p deve indicar um
@@ -122,6 +126,13 @@ bool isIteratorEmpty(Iterador it);
    a isIteratorEmpty retornam verdadeiro.
  */
 Item getIteratorNext(Iterador it);
+
+/**
+   Retorna a posicao do proximo item. O iterador nao deve estar esgotado.
+   Caso o item retornado seja o ultima, subsequentes invocacoes
+   a isIteratorEmpty retornam verdadeiro.
+ */
+Posic getIteratorNextPosic(Iterador it);
 
 /**
    Libera os recursos usados pelo iterador.

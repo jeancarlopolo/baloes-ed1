@@ -94,10 +94,11 @@ bool checkLinhaRetangulo(double x1, double y1, double x2, double y2,
                          double rx, double ry, double w, double h)
 {
     // Verifica se a linha intersecta algum dos lados do retângulo
-    return checkLinhaLinha(x1, y1, x2, y2, rx, ry, rx + w, ry) ||
-           checkLinhaLinha(x1, y1, x2, y2, rx + w, ry, rx + w, ry + h) ||
-           checkLinhaLinha(x1, y1, x2, y2, rx + w, ry + h, rx, ry + h) ||
-           checkLinhaLinha(x1, y1, x2, y2, rx, ry + h, rx, ry);
+    bool result = checkLinhaLinha(x1, y1, x2, y2, rx, ry, rx + w, ry);
+    result |= checkLinhaLinha(x1, y1, x2, y2, rx + w, ry, rx + w, ry + h);
+    result |= checkLinhaLinha(x1, y1, x2, y2, rx + w, ry + h, rx, ry + h);
+    result |= checkLinhaLinha(x1, y1, x2, y2, rx, ry + h, rx, ry);
+    return result;
 }
 
 // Verifica se o círculo está dentro do círculo

@@ -9,6 +9,7 @@ struct linha
     double x2;
     double y2;
     char *corBorda;
+    double rotacao;
 };
 
 Linha criaLinha(int id, double x1, double y1, double x2, double y2, char *cor)
@@ -54,6 +55,11 @@ char *getLinhaCor(Linha l)
     return ((struct linha *)l)->corBorda;
 }
 
+double getLinhaRotacao(Linha l)
+{
+    return ((struct linha *)l)->rotacao;
+}
+
 void setLinhaId(Linha l, int id)
 {
     ((struct linha *)l)->id = id;
@@ -82,6 +88,11 @@ void setLinhaY2(Linha l, double y2)
 void setLinhaCor(Linha l, char *cor)
 {
     ((struct linha *)l)->corBorda = cor;
+}
+
+void setLinhaRotacao(Linha l, double rotacao)
+{
+    ((struct linha *)l)->rotacao = rotacao;
 }
 
 void liberaLinha(Linha l)

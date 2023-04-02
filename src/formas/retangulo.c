@@ -10,6 +10,7 @@ struct retangulo
     double h;
     char *corBorda;
     char *corPreenchimento;
+    double rotacao;
 };
 
 Retangulo criaRetangulo(int id, double x, double y, double largura, double altura, char *corBorda, char *corPreenchimento)
@@ -61,6 +62,11 @@ double getRetanguloY(Retangulo r)
     return ((struct retangulo *)r)->y;
 }
 
+double getRetanguloRotacao(Retangulo r)
+{
+    return ((struct retangulo *)r)->rotacao;
+}
+
 void setRetanguloId(Retangulo r, int id)
 {
     ((struct retangulo *)r)->id = id;
@@ -94,6 +100,11 @@ void setRetanguloX(Retangulo r, double x)
 void setRetanguloY(Retangulo r, double y)
 {
     ((struct retangulo *)r)->y = y;
+}
+
+void setRetanguloRotacao(Retangulo r, double rotacao)
+{
+    ((struct retangulo *)r)->rotacao = rotacao;
 }
 
 void liberaRetangulo(Retangulo r)

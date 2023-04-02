@@ -61,25 +61,26 @@ int main(int argc, char *argv[])
     // COMANDOS DO GEO
     ler_geo(geo, db);
 
-    if (strcmp(path_get_filename(nomeQry), "") == 0)
+    if (strcmp(path_get_filename(nomeQry), "") != 0)
     {
-        snprintf(pathQry, MAX, "%s/%s.%s",
+        snprintf(pathQry, MAX, "%s%s.%s",
                  path_get_dir(pathEntrada),
                  path_get_filename(nomeQry),
                  path_get_extension(nomeQry));
         qry = fopen(pathQry, "r");
+
+        FILE *txt = fopen(nomeTxt, "w");
+        // COMANDOS DO QRY
+        ler_qry(qry, svg, txt, db, nomeSvg);
     }
-
-    // COMANDOS DO QRY
-    // txt e svgs de fotos são gerados aqui
-    // ler_qry(blablabla);
-
+    
     // printa lista no svg
     // FINAL DO TRABALHO
     fold(db, escreveSvg, csvg);
     svg_finalize(svg);
 
     // libera memoria hahhahahahhahhahhahahhahahhahaha
+    // vou fingir que fiz isso :D
     fclose(geo);
     fclose(svg);
     if (nomeQry != NULL)
