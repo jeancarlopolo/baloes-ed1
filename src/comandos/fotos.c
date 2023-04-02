@@ -17,7 +17,7 @@ struct clausuraFotoTxt
 // a foto já precisa estar com as posições relativas
 void reportarFotoTirada(Item item, Clausura c)
 {
-    Lista lista = (Lista)item;
+    Item lista = item;
     enum TipoForma tipo = getTipoForma(lista);
     struct clausuraFotoTxt *cFotoTxt = (struct clausuraFotoTxt *)c;
     FILE *txt = cFotoTxt->txt;
@@ -62,35 +62,38 @@ Y relativo: %lf\n",
     }
 }
 
-Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt)
+Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt, int i)
 {
     ClausuraRetangulo cRetangulo = criaClausuraRetangulo(getTextoX(balao) - getBalaoR(balao),
                                                          getTextoY(balao) + getBalaoP(balao),
                                                          2 * getBalaoR(balao),
                                                          getBalaoH(balao));
-    svg_rect(svg, getRetanguloX(cRetangulo),
-             getRetanguloY(cRetangulo),
-             getRetanguloLargura(cRetangulo),
-             getRetanguloAltura(cRetangulo),
+    svg_rect(svg, getTextoX(balao) - getBalaoR(balao),
+             getTextoY(balao) + getBalaoP(balao),
+             2 * getBalaoR(balao),
+             getBalaoH(balao),
              "none",
              "red",
              "stroke-dasharray=\"5,3\"");
-    liberaClausuraRetangulo(cRetangulo);
     struct foto *foto = malloc(sizeof(struct foto));
-    foto->lista = filter(lista, checkInRect, cRetangulo); // elementos são uma cópia dos originais
+    Lista listatemp = filter(lista, checkInRect, cRetangulo); // elementos são uma cópia dos originais
+    foto->lista = map(listatemp, copiaItem, NULL);            // copia a lista para não alterar a original
+    killLst(listatemp);
     foto->enviado = false;
     struct clausuraFotoTxt cFotoTxt;
     cFotoTxt.txt = txt;
-    reportarAtributos(balao, txt);
     Lista listanova = map(foto->lista, copiaItem, NULL);
     ClausuraFoto cFoto = criaClausuraFoto(getTextoX(balao),
                                           getTextoY(balao),
                                           getBalaoR(balao),
-                                          getBalaoH(balao),
-                                          getBalaoP(balao));
+                                          getBalaoP(balao),
+                                          getBalaoH(balao));
     fold(listanova, moveElementosFoto, cFoto); // move os elementos para o início do svg baseado nas posições relativas
     liberaClausuraFoto(cFoto);
-    reportarFotoTirada(listanova, &cFotoTxt);
+    Fila fila = getBalaoFilaI(balao, i);
+    insereFila(fila, foto);
+    reportarAtributos(balao, txt);
+    fold(listanova, reportarFotoTirada, &cFotoTxt);
     killLst(listanova);
     return foto;
 }
@@ -102,8 +105,8 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
     ClausuraFoto cFoto = criaClausuraFoto(getTextoX(balao),
                                           getTextoY(balao),
                                           getBalaoR(balao),
-                                          getBalaoH(balao),
-                                          getBalaoP(balao));
+                                          getBalaoP(balao),
+                                          getBalaoH(balao));
     fold(lista, moveElementosFoto, cFoto); // move os elementos para o início do svg baseado nas posições relativas
     liberaClausuraFoto(cFoto);
 
@@ -115,7 +118,6 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
     ClausuraSvg cSvg = criaClausuraSvg(svg);
     fold(lista, escreveSvg, cSvg); // insere os elementos no svg
     liberaClausuraSvg(cSvg);
-    svg_finalize(svg);
 
     char id[20];
     sprintf(id, "Balão: %d", getTextoId(balao));
@@ -161,6 +163,7 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
     liberaClausuraMaiorX(cMaiorX);
     fotoDereferenciada->enviado = true; // marca a foto como enviada
     killLst(lista);
+    svg_finalize(svg);
 }
 
 bool fotoEnviada(Foto f)

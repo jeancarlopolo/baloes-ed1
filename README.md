@@ -31,24 +31,12 @@ anotações pra mim mesmo:
 - gerando svg final ok
 
 
----- NO GERAL ----
-torpedos
-funções que geram coisas no txt pra nao ficar fudido longo cagado
-leitura.h
-mudar main (colocar as coisas novas e ver a questao dos path relativos/sem path)
-e pronto???????????
+PROBLEMAS IMEDIATOS
+CAÇA ACERTO
+---
 
-vai ter um for(fila) dai pra cada elemento (foto/lista) da fila eu acho o maiorX (entre ele e a bordaAtual) da foto anterior (0 se for primeiro)
-tendo a clausura com o dx (deslocamento das fotos) eu crio uma lista nova com as coisas deslocadas
+NÃO TA ACERTANDO TEXTO
+NÃO TA REMOVENDO DA LISTA
+NÃO TA REPORTANDO NO SVG
 
-TXT VAI SER NO SWITCH CASE DE LEITURA USANDO FUNÇOES DO TXT.H
-
-calcular onde a bomba ta
-remover elementos da lista principal
-clonar certos elementos
-
-ESTOU FAZENDO ELE PERCORRER AS FILAS DO BALAO ATINGIDO PELO MISSIL PRA CLONAR OS ELEMENTOS DAS FOTOS NAO ENVIADAS
-
-adicionar rotacao em todas as formas, e dar um jeito de remover os elementos filtrados
-
-estilos textos sao individuais por texto
+BALÃO PODE TIRAR FOTO DELE MESMO?????????

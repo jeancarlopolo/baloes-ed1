@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         // COMANDOS DO QRY
         ler_qry(qry, svg, txt, db, nomeSvg);
     }
-    
+
     // printa lista no svg
     // FINAL DO TRABALHO
     fold(db, escreveSvg, csvg);
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     // vou fingir que fiz isso :D
     fclose(geo);
     fclose(svg);
-    if (nomeQry != NULL)
+    if (strcmp(path_get_filename(nomeQry), "") != 0)
     {
         fclose(qry);
         path_destroy(nomeQry);

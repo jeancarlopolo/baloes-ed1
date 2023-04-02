@@ -298,10 +298,6 @@ Fila getBalaoFilaI(Texto t, int i)
 {
     struct texto *texto = (struct texto *)t;
     if (texto->tipoVeiculo == BALAO)
-    {
-        if (isVaziaFila(texto->balaoDados->filaFotos[i]))
-            return NULL;
         return texto->balaoDados->filaFotos[i];
-    }
     return NULL;
 }

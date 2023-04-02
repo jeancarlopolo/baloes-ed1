@@ -190,6 +190,8 @@ Posic getNextLst(Posic p)
 Posic getLastLst(Lista L)
 {
     struct lista *lst = (struct lista *)L;
+    if (lst->inicio == NULL)
+        return NULL;
     struct elemento *elem = lst->inicio;
 
     for (; elem->proximo != NULL; elem = elem->proximo)
@@ -348,8 +350,15 @@ Posic insertPosicLst(Lista L, Posic p, Lista ListaP)
     struct elemento *final = (struct elemento *)getLastLst(lst);
     struct elemento *elemento = (struct elemento *)p;
 
-    final->proximo = elemento;
-    elemento->anterior = final;
+    if (final == NULL)
+    {
+        lst->inicio = elemento;
+    }
+    else
+    {
+        final->proximo = elemento;
+        elemento->anterior = final;
+    }
 
     if (ListaP != NULL)
         free(ListaP);

@@ -91,12 +91,19 @@ void ler_geo(FILE *geo, Lista *lista)
 					strcat(texto, " ");
 					strcat(texto, palavras[i]);
 				}
+				char *ancora = (char *)malloc(10 * sizeof(char));
+				if (strcmp(palavras[6], "i") == 0)
+					strcpy(ancora, "start");
+				else if (strcmp(palavras[6], "f") == 0)
+					strcpy(ancora, "end");
+				else
+					strcpy(ancora, "middle");
 				Texto t = criaTexto(atoi(palavras[1]),
 									strtod(palavras[2], ponteiro),
 									strtod(palavras[3], ponteiro),
 									palavras[4],
 									palavras[5],
-									palavras[6],
+									ancora,
 									texto,
 									textoFamilia,
 									textoPeso,
@@ -203,7 +210,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 		if (n > 0)
 		{
 			// escreve no txt a linha lida
-			fprintf(txt, "[*] ");
+			fprintf(txt, "\n[*] ");
 			for (int i = 0; i < n; i++)
 			{
 				fprintf(txt, "%s ", palavras[i]);
@@ -224,7 +231,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 				}
 				reportarAtributos(itemEncontrado, txt);
 				moveForma(itemEncontrado, strtod(palavras[2], ponteiro), strtod(palavras[3], ponteiro));
-				fprintf(svg, "APÓS MOVIMENTO\n");
+				fprintf(txt, "APÓS MOVIMENTO\n");
 				reportarAtributos(itemEncontrado, txt);
 			}
 			else if (strcmp(palavras[0], "g") == 0)
@@ -234,7 +241,6 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 				ClausuraId acharIdC = criaClausuraId(id);
 				fold(lista, acharId, acharIdC);
 				itemEncontrado = getClausuraItem(acharIdC);
-				reportarAtributos(itemEncontrado, txt);
 				liberaClausuraId(acharIdC);
 				if (itemEncontrado == NULL)
 				{
@@ -243,7 +249,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 				}
 				reportarAtributos(itemEncontrado, txt);
 				giraForma(itemEncontrado, strtod(palavras[2], ponteiro));
-				fprintf(svg, "APÓS MOVIMENTO\n");
+				fprintf(txt, "APÓS MOVIMENTO\n");
 				reportarAtributos(itemEncontrado, txt);
 			}
 			else if (strcmp(palavras[0], "ff") == 0)
@@ -253,7 +259,6 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 				ClausuraId acharIdC = criaClausuraId(id);
 				fold(lista, acharId, acharIdC);
 				itemEncontrado = getClausuraItem(acharIdC);
-				reportarAtributos(itemEncontrado, txt);
 				liberaClausuraId(acharIdC);
 				if (itemEncontrado == NULL)
 				{
@@ -297,8 +302,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 						fprintf(txt, "ERRO: Fila %d não encontrada.\n\n", atoi(palavras[2]));
 						continue;
 					}
-					Foto foto = tirarFoto(lista, svg, itemEncontrado, txt);
-					insereFila(fila, foto);
+					tirarFoto(lista, svg, itemEncontrado, txt, atoi(palavras[2]));
 				}
 			}
 			else if (strcmp(palavras[0], "df") == 0)
@@ -322,6 +326,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 				else
 				{
 					char nomeArquivo[100];
+					strchr(nomeSvg, '.')[0] = '\0';
 					sprintf(nomeArquivo, "%s-%s.svg", nomeSvg, palavras[3]);
 					FILE *novoSvg = fopen(nomeArquivo, "w");
 					if (novoSvg == NULL)
@@ -343,6 +348,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 					Foto elementoInicial, elementoAtual;
 					Fila filaBalao = getBalaoFilaI(itemEncontrado, atoi(palavras[2]));
 					elementoInicial = getInicioFila(filaBalao);
+					elementoAtual = elementoInicial;
 					reportarAtributos(itemEncontrado, txt);
 
 					do // percorre a fila ao remover o elemento atual e inserindo-o no final até que o elemento atual seja o elemento inicial
@@ -395,7 +401,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 						fprintf(txt, "ERRO: Tipo de bomba inválido.\n\n");
 					}
 					posicaoBomba(getTextoX(itemEncontrado), getTextoY(itemEncontrado), getTextoRotacao(itemEncontrado), tipo, &xbomba, &ybomba);
-					explodeBomba(lista, xbomba, ybomba, tipo, strtod(palavras[5], ponteiro), itemEncontrado, atoi(palavras[4]), svg, txt);
+					explodeBomba(lista, xbomba, ybomba, tipo, strtod(palavras[5], ponteiro), itemEncontrado, atoi(palavras[4]), txt, svg);
 				}
 			}
 			else if (strcmp(palavras[0], "b?") == 0)

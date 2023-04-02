@@ -43,6 +43,8 @@ Lista checkInCirculoLista(Lista db, double xbomba, double ybomba, double raio)
     while (isIteratorEmpty(it) == false)
     {
         Posic posic = getIteratorNextPosic(it);
+        if (posic == NULL)
+            break;
         if (checkInCircle(getLst(posic), c))
             insertLst(lista, (Item)posic);
     }
@@ -251,12 +253,12 @@ void xVermelhoAncoras(Item item, Clausura c)
         x = getLinhaX1(forma);
         y = getLinhaY1(forma);
     }
-    svg_text(svg, x, y, "X", "FF0000", "FF0000", 0, "sans (sans-serif)", "normal", "20px", "middle", NULL);
+    svg_text(svg, x, y, "X", "#FF0000", "#FF0000", 0, "sans (sans-serif)", "normal", "20px", "middle", NULL);
     if (tipo == LINHA)
     {
         x = getLinhaX2(forma);
         y = getLinhaY2(forma);
-        svg_text(svg, x, y, "X", "FF0000", "FF0000", 0, "sans (sans-serif)", "normal", "20px", "middle", NULL);
+        svg_text(svg, x, y, "X", "#FF0000", "#FF0000", 0, "sans (sans-serif)", "normal", "20px", "middle", NULL);
     }
 }
 
@@ -298,7 +300,9 @@ void explodeBomba(Lista db, double xbomba, double ybomba, enum tipoBomba tipo, d
     insertPosicLst(acertosIdsAntes, getFirstLst(acertosIdsAgora), acertosIdsAgora); // 6
     cacaDisparou(caca);                                                             // 6
     fprintf(txt, "\nElementos atingidos:\n");                                       // 7
-    fold(atingidos, reportarAtributosFold, txt);                                        // 7
+    fold(atingidos, reportarAtributosFold, txt);                                    // 7
     fold(atingidos, xVermelhoAncoras, &cx);                                         // 7.5
     fold(atingidos, removeIntersecao, &cb);                                         // 8
+    svg_circle(svg, xbomba, ybomba, raio, "none", "red", "stroke-dasharray=\"2,2\"");
+    svg_line(svg, xbomba, ybomba, getTextoX(caca), getTextoY(caca), "#FF0000", "stroke-dasharray=\"2,2\"");
 }

@@ -98,6 +98,11 @@ bool checkLinhaRetangulo(double x1, double y1, double x2, double y2,
     result |= checkLinhaLinha(x1, y1, x2, y2, rx + w, ry, rx + w, ry + h);
     result |= checkLinhaLinha(x1, y1, x2, y2, rx + w, ry + h, rx, ry + h);
     result |= checkLinhaLinha(x1, y1, x2, y2, rx, ry + h, rx, ry);
+
+    // Verifica se a linha está dentro do retângulo sem estar intersectando nenhum dos lados
+    if (!result)
+        result = checkPontoRetangulo(x1, y1, w, h, rx, ry) ||
+                 checkPontoRetangulo(x2, y2, w, h, rx, ry);
     return result;
 }
 

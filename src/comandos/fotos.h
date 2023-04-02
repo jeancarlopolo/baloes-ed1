@@ -17,7 +17,7 @@ typedef void* Foto;
 
 // Função que cria uma foto
 // (a lista é o banco de dados geral)
-Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt);
+Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt, int i);
 
 // Função que imprime uma foto
 // (a lista é a foto tirada)

@@ -4,8 +4,12 @@
 
 void svg_init(FILE *svg)
 {
-    fprintf(svg, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    fprintf(svg, "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
+    //<svg xmlns:svg="http://www.w3.org/2000/svg"
+    // xmlns="http://www.w3.org/2000/svg"
+    // version="1.1">
+    fprintf(svg, "<svg xmlns:svg=\"http://www.w3.org/2000/svg\" \
+xmlns=\"http://www.w3.org/2000/svg\" \
+version=\"1.1\">\n");
 }
 
 void svg_finalize(FILE *svg)
