@@ -12,6 +12,9 @@
 // Escreve no arquivo de texto os atributos de uma forma
 void reportarAtributos(void* forma, FILE *txt);
 
+// Faz a mesma coisa que a função reportarAtributos, mas usável no fold
+void reportarAtributosFold(Item item, Clausura c);
+
 // Escreve no arquivo de texto os atributos de uma forma (recebe o endereço de um elemento da lista)
 void reportarAtributosElemento(void* elemento, FILE *txt);
 

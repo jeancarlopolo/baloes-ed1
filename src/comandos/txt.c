@@ -74,10 +74,10 @@ void reportarBalao(void *forma, FILE *txt)
         filaAtual = getBalaoFilaI(texto, i);
         if (filaAtual != NULL)
         {
-            fprintf(txt, "Fila %d - %d fotos\n", i);
+            fprintf(txt, "Fila %d - %d fotos\n", i, getQuantidadeFila(filaAtual));
         }
     }
-    fprintf(txt, "Atributos da câmera:\nR: %d\nP: %d\nH: %d\n",
+    fprintf(txt, "Atributos da câmera:\nR: %lf\nP: %lf\nH: %lf\n",
             getBalaoR(texto),
             getBalaoP(texto),
             getBalaoH(texto));
@@ -121,7 +121,7 @@ rotação: %lf\n\n\
 âncora: %s\n\
 família: %s\n\
 tamanho: %s\n",
-            getTextoTexto(texto),
+            getTextoConteudo(texto),
             getTextoId(texto),
             getTextoX(texto),
             getTextoY(texto),
@@ -161,4 +161,9 @@ void reportarAtributos(void *forma, FILE *txt)
 void reportarAtributosElemento(void *elemento, FILE *txt)
 {
     reportarAtributos(getLst(elemento), txt);
+}
+
+void reportarAtributosFold(Item item, Clausura c)
+{
+    reportarAtributos(item, c);
 }

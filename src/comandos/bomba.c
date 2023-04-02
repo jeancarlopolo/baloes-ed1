@@ -66,18 +66,26 @@ Item getIds(Item item, Clausura c)
 {
     Posic posic = (Posic)item;
     Item forma = getLst(posic);
+    if (c != NULL)
+    {
+    } // para tirar o warning hahahaha C é divertido
+    int *id = malloc(sizeof(int));
     switch (getTipoForma(forma))
     {
     case CIRCULO:
-        return (Item)getCirculoId(forma);
+        *id = getCirculoId(forma);
+        break;
     case RETANGULO:
-        return (Item)getRetanguloId(forma);
+        *id = getRetanguloId(forma);
+        break;
     case LINHA:
-        return (Item)getLinhaId(forma);
+        *id = getLinhaId(forma);
+        break;
     case TEXTO:
-        return (Item)getTextoId(forma);
+        *id = getTextoId(forma);
+        break;
     }
-    return (Item)-1;
+    return id;
 }
 
 // função map que desloca o elemento em dx e inverte as cores
@@ -91,7 +99,7 @@ Item deslocaInverte(Item item, Clausura c)
     enum TipoForma tipo = getTipoForma(item);
     switch (tipo)
     {
-    case CIRCULO:
+    case CIRCULO:;
         Circulo circulo = criaCirculo(*j,
                                       getCirculoX(item) + dx,
                                       getCirculoY(item),
@@ -99,7 +107,7 @@ Item deslocaInverte(Item item, Clausura c)
                                       getCirculoCorp(item),
                                       getCirculoCorb(item));
         return circulo;
-    case RETANGULO:
+    case RETANGULO:;
         Retangulo retangulo = criaRetangulo(*j,
                                             getRetanguloX(item) + dx,
                                             getRetanguloY(item),
@@ -108,7 +116,7 @@ Item deslocaInverte(Item item, Clausura c)
                                             getRetanguloCorPreenchimento(item),
                                             getRetanguloCorBorda(item));
         return retangulo;
-    case LINHA:
+    case LINHA:;
         Linha linha = criaLinha(*j,
                                 getLinhaX1(item) + dx,
                                 getLinhaY1(item),
@@ -116,7 +124,7 @@ Item deslocaInverte(Item item, Clausura c)
                                 getLinhaY2(item),
                                 getLinhaCor(item));
         return linha;
-    case TEXTO:
+    case TEXTO:;
         Texto texto = criaTexto(*j,
                                 getTextoX(item) + dx,
                                 getTextoY(item),
@@ -143,7 +151,6 @@ void clonaNaoEnviados(Item item, Clausura c)
     struct clausuraClone *cl = (struct clausuraClone *)c;
     Lista db = cl->db;
     Lista atingidos = cl->atingidos;
-    double dx = cl->dx;
     Fila filaBalao;
     Foto elementoInicial, elementoAtual;
     Lista elementosFoto, clonados, clonadosEnderecos;
@@ -167,7 +174,7 @@ void clonaNaoEnviados(Item item, Clausura c)
                 {
                     elementosFoto = getElementosFoto(elementoAtual);
                     clonados = map(elementosFoto, deslocaInverte, cl);
-                    fold(clonados, reportarAtributos, cl->txt);
+                    fold(clonados, reportarAtributosFold, cl->txt);
                     // é meio confuso, mas o que tá acontecendo é o seguinte:
                     // balões -> filas -> fotos -> listas de formas -> formas
                     // clonados é uma lista de formas criadas a partir de uma foto
@@ -190,6 +197,7 @@ void clonaNaoEnviados(Item item, Clausura c)
                     // poxa sao 5 structs uma dentro da outra, pra percorrer tudo precisa de 5 loops fica feio mas fazer o que né
                     clonadosEnderecos = checkInCirculoLista(clonados, cl->x, cl->y, cl->r);
                     insertPosicLst(db, getFirstLst(clonados), clonados);
+                    insertPosicLst(atingidos, getFirstLst(clonadosEnderecos), clonadosEnderecos);
                 }
                 removeFila(filaBalao);
                 insereFila(filaBalao, elementoInicial);
@@ -267,7 +275,6 @@ void explodeBomba(Lista db, double xbomba, double ybomba, enum tipoBomba tipo, d
     struct clausuraBomba cb;
     cb.db = db;
     double raio = tipo;
-    ClausuraCirculo cc = criaClausuraCirculo(xbomba, ybomba, raio);
     struct clausuraClone cl;
     cl.db = db;
     cl.dx = dx;
@@ -291,7 +298,7 @@ void explodeBomba(Lista db, double xbomba, double ybomba, enum tipoBomba tipo, d
     insertPosicLst(acertosIdsAntes, getFirstLst(acertosIdsAgora), acertosIdsAgora); // 6
     cacaDisparou(caca);                                                             // 6
     fprintf(txt, "\nElementos atingidos:\n");                                       // 7
-    fold(atingidos, reportarAtributos, txt);                                        // 7
+    fold(atingidos, reportarAtributosFold, txt);                                        // 7
     fold(atingidos, xVermelhoAncoras, &cx);                                         // 7.5
     fold(atingidos, removeIntersecao, &cb);                                         // 8
 }

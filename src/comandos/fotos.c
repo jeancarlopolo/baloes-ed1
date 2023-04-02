@@ -82,15 +82,16 @@ Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt)
     struct clausuraFotoTxt cFotoTxt;
     cFotoTxt.txt = txt;
     reportarAtributos(balao, txt);
-    Lista lista = map(foto->lista, copiaItem, NULL);
+    Lista listanova = map(foto->lista, copiaItem, NULL);
     ClausuraFoto cFoto = criaClausuraFoto(getTextoX(balao),
                                           getTextoY(balao),
                                           getBalaoR(balao),
                                           getBalaoH(balao),
                                           getBalaoP(balao));
-    fold(lista, moveElementosFoto, cFoto); // move os elementos para o início do svg baseado nas posições relativas
+    fold(listanova, moveElementosFoto, cFoto); // move os elementos para o início do svg baseado nas posições relativas
     liberaClausuraFoto(cFoto);
-    reportarFotoTirada(lista, &cFotoTxt);
+    reportarFotoTirada(listanova, &cFotoTxt);
+    killLst(listanova);
     return foto;
 }
 
@@ -115,14 +116,15 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
     fold(lista, escreveSvg, cSvg); // insere os elementos no svg
     liberaClausuraSvg(cSvg);
     svg_finalize(svg);
-    
+
     char id[20];
     sprintf(id, "Balão: %d", getTextoId(balao));
 
     ClausuraPontuacao cPontuacao = criaClausuraPontuacao(0);
     fold(lista, calculaPontuacao, cPontuacao);
-    char pontuacao[20];
-    sprintf(pontuacao, "Pontuação: %.2lf", getClausuraPontuacao(cPontuacao));
+    char pontuacaoString[20];
+    sprintf(pontuacaoString, "Pontuação: %.2lf", getClausuraPontuacao(cPontuacao));
+    *pontuacao = getClausuraPontuacao(cPontuacao);
     liberaClausuraPontuacao(cPontuacao);
 
     char r[20];
@@ -138,7 +140,7 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
 
     // id do balao, pontuação, r, h, p
     svg_text(svg, *dx, getBalaoH(balao) + distancia, id, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 2 * distancia, pontuacao, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 2 * distancia, pontuacaoString, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
     svg_text(svg, *dx, getBalaoH(balao) + 3 * distancia, r, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
     svg_text(svg, *dx, getBalaoH(balao) + 4 * distancia, h, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
     svg_text(svg, *dx, getBalaoH(balao) + 5 * distancia, p, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);

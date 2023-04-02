@@ -139,22 +139,22 @@ void moveForma(Item item, double dx, double dy)
 	enum TipoForma tipo = getTipoForma(item);
 	switch (tipo)
 	{
-	case CIRCULO:
+	case CIRCULO:; // SÓ DEUS SABE PORQUE EU PRECISO COLOCAR ESSE PONTO E VÍRGULA AQUI
 		Circulo c = (Circulo)item;
 		setCirculoX(c, getCirculoX(c) + dx);
 		setCirculoY(c, getCirculoY(c) + dy);
 		break;
-	case RETANGULO:
+	case RETANGULO:;
 		Retangulo r = (Retangulo)item;
 		setRetanguloX(r, getRetanguloX(r) + dx);
 		setRetanguloY(r, getRetanguloY(r) + dy);
 		break;
-	case TEXTO:
+	case TEXTO:;
 		Texto t = (Texto)item;
 		setTextoX(t, getTextoX(t) + dx);
 		setTextoY(t, getTextoY(t) + dy);
 		break;
-	case LINHA:
+	case LINHA:;
 		Linha l = (Linha)item;
 		setLinhaX1(l, getLinhaX1(l) + dx);
 		setLinhaY1(l, getLinhaY1(l) + dy);
@@ -169,19 +169,19 @@ void giraForma(Item item, double rotacao)
 	enum TipoForma tipo = getTipoForma(item);
 	switch (tipo)
 	{
-	case CIRCULO:
+	case CIRCULO:;
 		Circulo c = (Circulo)item;
 		setCirculoRotacao(c, getCirculoRotacao(c) + rotacao);
 		break;
-	case RETANGULO:
+	case RETANGULO:;
 		Retangulo r = (Retangulo)item;
 		setRetanguloRotacao(r, getRetanguloRotacao(r) + rotacao);
 		break;
-	case TEXTO:
+	case TEXTO:;
 		Texto t = (Texto)item;
 		rotacionaTexto(t, rotacao); // preguiça de mudar a função
 		break;
-	case LINHA:
+	case LINHA:;
 		Linha l = (Linha)item;
 		setLinhaRotacao(l, getLinhaRotacao(l) + rotacao);
 		break;
@@ -193,7 +193,6 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 	char *palavras[MAX];
 	int n;
 	char **ponteiro = NULL; // strtod
-	char texto[MAX];
 	int id;
 	Item itemEncontrado = NULL;
 	// enquanto não chegar ao final do arquivo
@@ -214,10 +213,10 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 			{
 				id = atoi(palavras[1]);
 				// procura o elemento na lista
-				ClausuraId acharId = criaClausuraId(id);
-				fold(lista, acharId, &id);
-				itemEncontrado = getClausuraItem(acharId);
-				liberaClausuraId(acharId);
+				ClausuraId acharIdC = criaClausuraId(id);
+				fold(lista, acharId, acharIdC);
+				itemEncontrado = getClausuraItem(acharIdC);
+				liberaClausuraId(acharIdC);
 				if (itemEncontrado == NULL)
 				{
 					fprintf(txt, "ERRO: Forma com id %d não encontrada.\n\n", id);
@@ -232,11 +231,11 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 			{
 				id = atoi(palavras[1]);
 				// procura o elemento na lista
-				ClausuraId acharId = criaClausuraId(id);
-				fold(lista, acharId, &id);
-				itemEncontrado = getClausuraItem(acharId);
+				ClausuraId acharIdC = criaClausuraId(id);
+				fold(lista, acharId, acharIdC);
+				itemEncontrado = getClausuraItem(acharIdC);
 				reportarAtributos(itemEncontrado, txt);
-				liberaClausuraId(acharId);
+				liberaClausuraId(acharIdC);
 				if (itemEncontrado == NULL)
 				{
 					fprintf(txt, "ERRO: Forma com id %d não encontrada.\n\n", id);
@@ -251,11 +250,11 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 			{
 				id = atoi(palavras[1]);
 				// procura o elemento na lista
-				ClausuraId acharId = criaClausuraId(id);
-				fold(lista, acharId, &id);
-				itemEncontrado = getClausuraItem(acharId);
+				ClausuraId acharIdC = criaClausuraId(id);
+				fold(lista, acharId, acharIdC);
+				itemEncontrado = getClausuraItem(acharIdC);
 				reportarAtributos(itemEncontrado, txt);
-				liberaClausuraId(acharId);
+				liberaClausuraId(acharIdC);
 				if (itemEncontrado == NULL)
 				{
 					fprintf(txt, "ERRO: Forma com id %d não encontrada.\n\n", id);
@@ -276,10 +275,10 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 			{
 				id = atoi(palavras[1]);
 				// procura o elemento na lista
-				ClausuraId acharId = criaClausuraId(id);
-				fold(lista, acharId, &id);
-				itemEncontrado = getClausuraItem(acharId);
-				liberaClausuraId(acharId);
+				ClausuraId acharIdC = criaClausuraId(id);
+				fold(lista, acharId, acharIdC);
+				itemEncontrado = getClausuraItem(acharIdC);
+				liberaClausuraId(acharIdC);
 				if (itemEncontrado == NULL)
 				{
 					fprintf(txt, "ERRO: Forma com id %d não encontrada.\n\n", id);
@@ -306,10 +305,10 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 			{
 				id = atoi(palavras[1]);
 				// procura o elemento na lista
-				ClausuraId acharId = criaClausuraId(id);
-				fold(lista, acharId, &id);
-				itemEncontrado = getClausuraItem(acharId);
-				liberaClausuraId(acharId);
+				ClausuraId acharIdC = criaClausuraId(id);
+				fold(lista, acharId, acharIdC);
+				itemEncontrado = getClausuraItem(acharIdC);
+				liberaClausuraId(acharIdC);
 				if (itemEncontrado == NULL)
 				{
 					fprintf(txt, "ERRO: Forma com id %d não encontrada.\n\n", id);
@@ -337,7 +336,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 						fprintf(txt, "ERRO: Fila %d não encontrada.\n\n", atoi(palavras[2]));
 						continue;
 					}
-					int *dx = malloc(sizeof(int));
+					double *dx = malloc(sizeof(double));
 					*dx = 0;
 					double *pontuacao = malloc(sizeof(double));
 					*pontuacao = 0;
@@ -363,10 +362,10 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 			{
 				id = atoi(palavras[1]);
 				// procura o elemento na lista
-				ClausuraId acharId = criaClausuraId(id);
-				fold(lista, acharId, &id);
-				itemEncontrado = getClausuraItem(acharId);
-				liberaClausuraId(acharId);
+				ClausuraId acharIdC = criaClausuraId(id);
+				fold(lista, acharId, acharIdC);
+				itemEncontrado = getClausuraItem(acharIdC);
+				liberaClausuraId(acharIdC);
 				if (itemEncontrado == NULL)
 				{
 					fprintf(txt, "ERRO: Forma com id %d não encontrada.\n\n", id);
