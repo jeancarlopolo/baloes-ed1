@@ -4,74 +4,68 @@
 
 int main(int argc, char *argv[])
 {
-    Path pathEntrada = path_create("");
-    Path pathSaida = path_create("");
-    Path nomeGeo = NULL, nomeQry = NULL;
-    FILE *qry;
-    char pathGeo[MAX], pathQry[MAX], nomeSvg[MAX], nomeTxt[MAX];
+    Path pathGeoStruct = path_create("");
+    Path pathQryStruct = path_create("");
+    Path pathSvgStruct = path_create("");
+    Path pathTxtStruct = path_create("");
+    char *pathGeo, *pathQry, *nomeSvg, *nomeTxt;
+    char *entrada, *saida, *nomeGeo, *nomeQry = "SEM-QRY";
     Clausura csvg;
     for (int i = 0; i < argc; i++)
     {
         if (strcmp(argv[i], "-e") == 0)
         {
-            path_set_dir(pathEntrada, argv[i + 1]);
+            entrada = argv[i + 1];
         }
         else if (strcmp(argv[i], "-f") == 0)
         {
-            nomeGeo = path_create(argv[i + 1]);
+            nomeGeo = argv[i + 1];
         }
         else if (strcmp(argv[i], "-q") == 0)
         {
-            nomeQry = path_create(argv[i + 1]);
+            nomeQry = argv[i + 1];
         }
         else if (strcmp(argv[i], "-o") == 0)
         {
-            path_set_dir(pathSaida, argv[i + 1]);
+            saida = argv[i + 1];
         }
     }
-
-    if (nomeQry == NULL)
+    updatePath(pathGeoStruct, entrada, nomeGeo, "");
+    if (strcmp(path_get_filename(pathGeoStruct), "") == 0)
     {
-        nomeQry = path_create("");
+        printf("Erro: Nome do arquivo geo não informado.\n");
+        return 1;
     }
+    pathGeo = path_get_full(pathGeoStruct);
+    FILE *geo = fopen(pathGeo, "r");
+    updatePath(pathQryStruct, entrada, nomeQry, "");
 
-    snprintf(pathGeo, MAX, "%s%s.%s",
-             path_get_dir(pathEntrada),
-             path_get_filename(nomeGeo),
-             path_get_extension(nomeGeo));
-
-    snprintf(nomeSvg, MAX, "%s%s-%s.%s",
-             path_get_dir(pathSaida),
-             path_get_filename(nomeGeo),
-             path_get_filename(nomeQry),
-             "svg");
-
-    snprintf(nomeTxt, MAX, "%s%s-%s.%s",
-             path_get_dir(pathSaida),
-             path_get_filename(nomeGeo),
-             path_get_filename(nomeQry),
-             "txt");
+    char *NomeGeoQry = malloc(sizeof(char) * (strlen(path_get_filename(pathGeoStruct)) + strlen(path_get_filename(pathQryStruct)) + 2));
+    strcpy(NomeGeoQry, path_get_filename(pathGeoStruct));
+    strcat(NomeGeoQry, "-");
+    strcat(NomeGeoQry, path_get_filename(pathQryStruct));
+    updatePath(pathSvgStruct, saida, NomeGeoQry, ".svg");
+    nomeSvg = path_get_full(pathSvgStruct);
+    FILE *svg = fopen(nomeSvg, "w");
+    updatePath(pathTxtStruct, saida, NomeGeoQry, ".txt");
 
     Lista db = createLst(-1);
-    FILE *geo = fopen(pathGeo, "r");
-    FILE *svg = fopen(nomeSvg, "w");
     csvg = criaClausuraSvg(svg);
     svg_init(svg);
 
     // COMANDOS DO GEO
     ler_geo(geo, db);
 
-    if (strcmp(path_get_filename(nomeQry), "") != 0)
+    if (strcmp(path_get_filename(pathQryStruct), "SEM-QRY") != 0)
     {
-        snprintf(pathQry, MAX, "%s%s.%s",
-                 path_get_dir(pathEntrada),
-                 path_get_filename(nomeQry),
-                 path_get_extension(nomeQry));
-        qry = fopen(pathQry, "r");
-
+        pathQry = path_get_full(pathQryStruct);
+        nomeTxt = path_get_full(pathTxtStruct);
+        FILE *qry = fopen(pathQry, "r");
         FILE *txt = fopen(nomeTxt, "w");
         // COMANDOS DO QRY
         ler_qry(qry, svg, txt, db, nomeSvg);
+        fclose(qry);
+        fclose(txt);
     }
 
     // printa lista no svg
@@ -83,14 +77,14 @@ int main(int argc, char *argv[])
     // vou fingir que fiz isso :D
     fclose(geo);
     fclose(svg);
-    if (strcmp(path_get_filename(nomeQry), "") != 0)
-    {
-        fclose(qry);
-        path_destroy(nomeQry);
-    }
+    free(pathGeo);
+    free(nomeSvg);
+    free(nomeTxt);
+    free(pathQry);
+    path_destroy(pathGeoStruct);
+    path_destroy(pathQryStruct);
+    path_destroy(pathSvgStruct);
+    path_destroy(pathTxtStruct);
     killLst(db);
-    path_destroy(pathEntrada);
-    path_destroy(pathSaida);
-    path_destroy(nomeGeo);
     return 0;
 }

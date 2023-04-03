@@ -6,6 +6,9 @@
 /** Uma estrutura para representar o caminho de um arquivo. */
 typedef void *Path;
 
+/** Atualiza o caminho. */
+void updatePath(Path path, char *dir, char *filename, char *ext);
+
 /** Cria um novo caminho a partir de uma string. */
 Path path_create(char *path);
 
