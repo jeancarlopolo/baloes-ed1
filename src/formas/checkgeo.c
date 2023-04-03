@@ -23,30 +23,27 @@ bool checkPontoRetangulo(double x, double y,
 bool checkRetanguloCirculo(double x, double y, double w, double h,
                            double cx, double cy, double r)
 {
-    double dx = fabs(x - cx);
-    double dy = fabs(y - cy);
+    // Verifica se algum dos pontos do retângulo está dentro do círculo
+    bool result = checkPontoCirculo(x, y, r, cx, cy);
+    result |= checkPontoCirculo(x + w, y, r, cx, cy);
+    result |= checkPontoCirculo(x, y + h, r, cx, cy);
+    result |= checkPontoCirculo(x + w, y + h, r, cx, cy);
 
-    if (dx > r + w / 2)
-        return false;
-    if (dy > r + h / 2)
-        return false;
-
-    if (dx <= w / 2)
-        return true;
-    if (dy <= h / 2)
-        return true;
-
-    double cornerDistance_sq = (dx - w / 2) * (dx - w / 2) +
-                               (dy - h / 2) * (dy - h / 2);
-
-    return cornerDistance_sq <= r * r;
+    // Verifica se algum dos lados do retângulo intersecta o círculo
+    result |= checkLinhaCirculo(x, y, x + w, y, cx, cy, r);
+    result |= checkLinhaCirculo(x + w, y, x + w, y + h, cx, cy, r);
+    result |= checkLinhaCirculo(x + w, y + h, x, y + h, cx, cy, r);
+    result |= checkLinhaCirculo(x, y + h, x, y, cx, cy, r);
+    return result;
 }
 
 // Verifica se o círculo está dentro do retângulo
 bool checkCirculoRetangulo(double cx, double cy, double r,
                            double x, double y, double w, double h)
 {
-    return checkRetanguloCirculo(x, y, w, h, cx, cy, r);
+    bool result = checkPontoRetangulo(cx, cy, w, h, x, y);
+    result |= checkRetanguloCirculo(x, y, w, h, cx, cy, r);
+    return result;
 }
 
 // Verifica se a linha está dentro do círculo
@@ -122,6 +119,30 @@ bool checkCirculoCirculo(double x1, double y1, double r1,
 bool checkRetanguloRetangulo(double x1, double y1, double w1, double h1,
                              double x2, double y2, double w2, double h2)
 {
+    // QUAISQUER CASOS COM UM VÉRTICE DO RETÂNGULO 1 DENTRO DO RETÂNGULO 2
     // Verifica se o retângulo 1 está dentro do retângulo 2
-    return x1 >= x2 && x1 + w1 <= x2 + w2 && y1 >= y2 && y1 + h1 <= y2 + h2;
+    bool result = checkPontoRetangulo(x1, y1, w2, h2, x2, y2);
+    result |= checkPontoRetangulo(x1 + w1, y1, w2, h2, x2, y2);
+    result |= checkPontoRetangulo(x1, y1 + h1, w2, h2, x2, y2);
+    result |= checkPontoRetangulo(x1 + w1, y1 + h1, w2, h2, x2, y2);
+
+    // Verifica se o retângulo 2 está dentro do retângulo 1
+    result |= checkPontoRetangulo(x2, y2, w1, h1, x1, y1);
+    result |= checkPontoRetangulo(x2 + w2, y2, w1, h1, x1, y1);
+    result |= checkPontoRetangulo(x2, y2 + h2, w1, h1, x1, y1);
+    result |= checkPontoRetangulo(x2 + w2, y2 + h2, w1, h1, x1, y1);
+
+    // CASOS EM QUE PARECE UM + OS DOIS RETÂNGULOS
+    // Verifica se os lados horizontais do retângulo 1 colidem com os lados verticais do retângulo 2
+    result |= checkLinhaLinha(x1, y1, x1 + w1, y1, x2, y2, x2, y2 + h2);
+    result |= checkLinhaLinha(x1, y1, x1 + w1, y1, x2 + w2, y2, x2 + w2, y2 + h2);
+    result |= checkLinhaLinha(x1, y1 + h1, x1 + w1, y1 + h1, x2, y2, x2, y2 + h2);
+    result |= checkLinhaLinha(x1, y1 + h1, x1 + w1, y1 + h1, x2 + w2, y2, x2 + w2, y2 + h2);
+
+    // Verifica se os lados verticais do retângulo 1 colidem com os lados horizontais do retângulo 2
+    result |= checkLinhaLinha(x1, y1, x1, y1 + h1, x2, y2, x2 + w2, y2);
+    result |= checkLinhaLinha(x1, y1, x1, y1 + h1, x2, y2 + h2, x2 + w2, y2 + h2);
+    result |= checkLinhaLinha(x1 + w1, y1, x1 + w1, y1 + h1, x2, y2, x2 + w2, y2);
+    result |= checkLinhaLinha(x1 + w1, y1, x1 + w1, y1 + h1, x2, y2 + h2, x2 + w2, y2 + h2);
+    return result;
 }

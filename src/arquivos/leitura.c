@@ -350,7 +350,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 					elementoInicial = getInicioFila(filaBalao);
 					elementoAtual = elementoInicial;
 					reportarAtributos(itemEncontrado, txt);
-
+					svg_init(novoSvg);
 					do // percorre a fila ao remover o elemento atual e inserindo-o no final até que o elemento atual seja o elemento inicial
 					{
 						imprimeFoto(elementoAtual, novoSvg, itemEncontrado, dx, pontuacao);
@@ -360,6 +360,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 						insereFila(filaBalao, elementoInicial);
 						elementoAtual = getInicioFila(filaBalao);
 					} while (elementoAtual != elementoInicial);
+					svg_finalize(novoSvg);
 					free(dx);
 					free(pontuacao);
 				}

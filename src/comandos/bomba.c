@@ -25,6 +25,7 @@ struct clausuraClone
 struct clausuraInverte
 {
     double dx;
+    double xbalao, ybalao; // como as coordenadas das fotos são relativas ao balão, é necessário guardar as coordenadas do balão
     int *j;
 };
 
@@ -92,27 +93,29 @@ Item getIds(Item item, Clausura c)
 
 // função map que desloca o elemento em dx e inverte as cores
 // item é uma Foto
-// c é a clausura que contém o deslocamento dx e o id que começa a ser usado para as fotos clonadas
+// c é a clausura que contém o deslocamento dx, id que começa a ser usado para as fotos clonadas e as coordenadas do balão
 Item deslocaInverte(Item item, Clausura c)
 {
     struct clausuraInverte *ci = (struct clausuraInverte *)c;
     double dx = ci->dx;
+    double xbalao = ci->xbalao;
+    double ybalao = ci->ybalao;
     int *j = ci->j;
     enum TipoForma tipo = getTipoForma(item);
     switch (tipo)
     {
     case CIRCULO:;
         Circulo circulo = criaCirculo(*j,
-                                      getCirculoX(item) + dx,
-                                      getCirculoY(item),
+                                      getCirculoX(item) + dx + xbalao,
+                                      getCirculoY(item) + ybalao,
                                       getCirculoR(item),
                                       getCirculoCorp(item),
                                       getCirculoCorb(item));
         return circulo;
     case RETANGULO:;
         Retangulo retangulo = criaRetangulo(*j,
-                                            getRetanguloX(item) + dx,
-                                            getRetanguloY(item),
+                                            getRetanguloX(item) + dx + xbalao,
+                                            getRetanguloY(item) + ybalao,
                                             getRetanguloAltura(item),
                                             getRetanguloAltura(item),
                                             getRetanguloCorPreenchimento(item),
@@ -120,16 +123,16 @@ Item deslocaInverte(Item item, Clausura c)
         return retangulo;
     case LINHA:;
         Linha linha = criaLinha(*j,
-                                getLinhaX1(item) + dx,
-                                getLinhaY1(item),
-                                getLinhaX2(item) + dx,
-                                getLinhaY2(item),
+                                getLinhaX1(item) + dx + xbalao,
+                                getLinhaY1(item) + ybalao,
+                                getLinhaX2(item) + dx + xbalao,
+                                getLinhaY2(item) + ybalao,
                                 getLinhaCor(item));
         return linha;
     case TEXTO:;
         Texto texto = criaTexto(*j,
-                                getTextoX(item) + dx,
-                                getTextoY(item),
+                                getTextoX(item) + dx + xbalao,
+                                getTextoY(item) + ybalao,
                                 getTextoCorPreenchimento(item),
                                 getTextoCorBorda(item),
                                 getTextoAncora(item),

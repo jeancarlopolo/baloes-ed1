@@ -66,8 +66,8 @@ bool checkPontoRetanguloItem(Item item, Clausura c)
     struct clausuraRetangulo *retangulo = (struct clausuraRetangulo *)c;
     return checkPontoRetangulo(getTextoX(item),
                                getTextoY(item),
-                               retangulo->altura,
                                retangulo->largura,
+                               retangulo->altura,
                                retangulo->x,
                                retangulo->y);
 }

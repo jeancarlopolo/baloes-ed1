@@ -126,7 +126,8 @@ void removeLst(Lista L, Posic p)
     else
     {
         elem->anterior->proximo = elem->proximo;
-        elem->proximo->anterior = elem->anterior;
+        if (elem->proximo != NULL)
+            elem->proximo->anterior = elem->anterior;
     }
 }
 

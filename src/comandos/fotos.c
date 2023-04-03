@@ -77,12 +77,12 @@ Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt, int i)
              "stroke-dasharray=\"5,3\"");
     struct foto *foto = malloc(sizeof(struct foto));
     Lista listatemp = filter(lista, checkInRect, cRetangulo); // elementos são uma cópia dos originais
-    foto->lista = map(listatemp, copiaItem, NULL);            // copia a lista para não alterar a original
+    Lista listanova = map(listatemp, copiaItem, NULL);            // copia a lista para não alterar a original
     killLst(listatemp);
     foto->enviado = false;
     struct clausuraFotoTxt cFotoTxt;
     cFotoTxt.txt = txt;
-    Lista listanova = map(foto->lista, copiaItem, NULL);
+
     ClausuraFoto cFoto = criaClausuraFoto(getTextoX(balao),
                                           getTextoY(balao),
                                           getBalaoR(balao),
@@ -94,7 +94,7 @@ Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt, int i)
     insereFila(fila, foto);
     reportarAtributos(balao, txt);
     fold(listanova, reportarFotoTirada, &cFotoTxt);
-    killLst(listanova);
+    foto->lista = listanova;
     return foto;
 }
 
@@ -102,19 +102,11 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
 {
     struct foto *fotoDereferenciada = (struct foto *)f;
     Lista lista = map(fotoDereferenciada->lista, copiaItem, NULL); // copia a lista para não alterar a original
-    ClausuraFoto cFoto = criaClausuraFoto(getTextoX(balao),
-                                          getTextoY(balao),
-                                          getBalaoR(balao),
-                                          getBalaoP(balao),
-                                          getBalaoH(balao));
-    fold(lista, moveElementosFoto, cFoto); // move os elementos para o início do svg baseado nas posições relativas
-    liberaClausuraFoto(cFoto);
 
     ClausuraDeslocaDireita cDesloca = criaClausuraDeslocaDireita(*dx);
     fold(lista, deslocaDireita, cDesloca); // desloca os elementos para a direita pra caber no svg
     liberaClausuraDeslocaDireita(cDesloca);
 
-    svg_init(svg);
     ClausuraSvg cSvg = criaClausuraSvg(svg);
     fold(lista, escreveSvg, cSvg); // insere os elementos no svg
     liberaClausuraSvg(cSvg);
@@ -138,14 +130,14 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
     char p[20];
     sprintf(p, "p: %lf", getBalaoP(balao));
 
-    int distancia = 30; // distancia entre as linhas de texto
+    int distancia = 15; // distancia entre as linhas de texto
 
     // id do balao, pontuação, r, h, p
-    svg_text(svg, *dx, getBalaoH(balao) + distancia, id, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 2 * distancia, pontuacaoString, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 3 * distancia, r, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 4 * distancia, h, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 5 * distancia, p, "black", "none", 0, "sans (sans-serif)", "normal", "20px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + distancia, id, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 2 * distancia, pontuacaoString, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 3 * distancia, r, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 4 * distancia, h, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 5 * distancia, p, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
 
     // desenha o retangulo da foto
     svg_rect(svg,
@@ -159,11 +151,12 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
 
     ClausuraMaiorX cMaiorX = criaClausuraMaiorX();
     fold(lista, achaMaiorX, cMaiorX);
-    *dx = getClausuraMaiorX(cMaiorX) > getTextoX(balao) + 2 * getBalaoR(balao) ? getClausuraMaiorX(cMaiorX) : getTextoX(balao) + 2 * getBalaoR(balao);
+    double raioBalao = getBalaoR(balao);
+    *dx += raioBalao * 2;
+    *dx = getClausuraMaiorX(cMaiorX) > *dx ? getClausuraMaiorX(cMaiorX) : *dx; // se alguma forma extrapolar o retangulo, atualiza a posição do retangulo
     liberaClausuraMaiorX(cMaiorX);
     fotoDereferenciada->enviado = true; // marca a foto como enviada
     killLst(lista);
-    svg_finalize(svg);
 }
 
 bool fotoEnviada(Foto f)
