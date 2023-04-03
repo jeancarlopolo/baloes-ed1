@@ -19,14 +19,14 @@ struct clausuraClone
     Lista atingidos;
     double dx;
     double x, y, r; // coordenadas do centro da bomba e raio
-    int *j;
+    int j;
 };
 
 struct clausuraInverte
 {
     double dx;
-    double xbalao, ybalao; // como as coordenadas das fotos são relativas ao balão, é necessário guardar as coordenadas do balão
-    int *j;
+    double xOffset, yOffset; // como as coordenadas das fotos são relativas ao balão, é necessário guardar as coordenadas do balão
+    int j;
 };
 
 struct clausuraX
@@ -41,13 +41,14 @@ Lista checkInCirculoLista(Lista db, double xbomba, double ybomba, double raio)
     Lista lista = createLst(-1);
     Iterador it = createIterador(db, false);
     ClausuraCirculo c = criaClausuraCirculo(xbomba, ybomba, raio);
+    Posic posic;
     while (isIteratorEmpty(it) == false)
     {
-        Posic posic = getIteratorNextPosic(it);
+        posic = getIteratorNextPosic(it);
         if (posic == NULL)
             break;
         if (checkInCircle(getLst(posic), c))
-            insertLst(lista, (Item)posic);
+            insertLst(lista, posic);
     }
     killIterator(it);
     liberaClausuraCirculo(c);
@@ -98,41 +99,41 @@ Item deslocaInverte(Item item, Clausura c)
 {
     struct clausuraInverte *ci = (struct clausuraInverte *)c;
     double dx = ci->dx;
-    double xbalao = ci->xbalao;
-    double ybalao = ci->ybalao;
-    int *j = ci->j;
+    int *j;
+    j = &(ci->j);
+    *j += 1;
     enum TipoForma tipo = getTipoForma(item);
     switch (tipo)
     {
     case CIRCULO:;
-        Circulo circulo = criaCirculo(*j,
-                                      getCirculoX(item) + dx + xbalao,
-                                      getCirculoY(item) + ybalao,
+        Circulo circulo = criaCirculo(*j - 1,
+                                      getCirculoX(item) + dx + ci->xOffset,
+                                      getCirculoY(item) + +ci->yOffset,
                                       getCirculoR(item),
                                       getCirculoCorp(item),
                                       getCirculoCorb(item));
         return circulo;
     case RETANGULO:;
-        Retangulo retangulo = criaRetangulo(*j,
-                                            getRetanguloX(item) + dx + xbalao,
-                                            getRetanguloY(item) + ybalao,
-                                            getRetanguloAltura(item),
+        Retangulo retangulo = criaRetangulo(*j - 1,
+                                            getRetanguloX(item) + dx + ci->xOffset,
+                                            getRetanguloY(item) + ci->yOffset,
+                                            getRetanguloLargura(item),
                                             getRetanguloAltura(item),
                                             getRetanguloCorPreenchimento(item),
                                             getRetanguloCorBorda(item));
         return retangulo;
     case LINHA:;
-        Linha linha = criaLinha(*j,
-                                getLinhaX1(item) + dx + xbalao,
-                                getLinhaY1(item) + ybalao,
-                                getLinhaX2(item) + dx + xbalao,
-                                getLinhaY2(item) + ybalao,
+        Linha linha = criaLinha(*j - 1,
+                                getLinhaX1(item) + dx + ci->xOffset,
+                                getLinhaY1(item) + ci->yOffset,
+                                getLinhaX2(item) + dx + ci->xOffset,
+                                getLinhaY2(item) + ci->yOffset,
                                 getLinhaCor(item));
         return linha;
     case TEXTO:;
-        Texto texto = criaTexto(*j,
-                                getTextoX(item) + dx + xbalao,
-                                getTextoY(item) + ybalao,
+        Texto texto = criaTexto(*j - 1,
+                                getTextoX(item) + dx + ci->xOffset,
+                                getTextoY(item) + ci->yOffset,
                                 getTextoCorPreenchimento(item),
                                 getTextoCorBorda(item),
                                 getTextoAncora(item),
@@ -142,7 +143,6 @@ Item deslocaInverte(Item item, Clausura c)
                                 getTextoTamanho(item));
         return texto;
     }
-    (*j)++;
     return item;
 }
 
@@ -153,9 +153,19 @@ Item deslocaInverte(Item item, Clausura c)
 // c é a clausura que contém a lista db, o deslocamento dx, lista de elementos que serão removidos e o círculo da bomba
 void clonaNaoEnviados(Item item, Clausura c)
 {
+    // struct clausuraInverte
+    // {
+    //     double dx;
+    //     double xbalao, ybalao; // como as coordenadas das fotos são relativas ao balão, é necessário guardar as coordenadas do balão
+    //     int j;
+    // };
     struct clausuraClone *cl = (struct clausuraClone *)c;
     Lista db = cl->db;
     Lista atingidos = cl->atingidos;
+    struct clausuraInverte ci;
+    ci.dx = cl->dx;
+    ci.j = cl->j;
+
     Fila filaBalao;
     Foto elementoInicial, elementoAtual;
     Lista elementosFoto, clonados, clonadosEnderecos;
@@ -166,9 +176,10 @@ void clonaNaoEnviados(Item item, Clausura c)
         for (int filaAtual = 0; filaAtual < 10; filaAtual++)
         {
             filaBalao = getBalaoFilaI(balaoAtual, filaAtual);
-            if (filaBalao == NULL)
+            if (isVaziaFila(filaBalao))
                 continue;
             elementoInicial = getInicioFila(filaBalao);
+            elementoAtual = elementoInicial;
 
             // percorre as fotos da fila atual
             // se a foto não foi enviada, clona a foto e insere na lista db
@@ -178,31 +189,36 @@ void clonaNaoEnviados(Item item, Clausura c)
                 if (fotoEnviada(elementoAtual) == false)
                 {
                     elementosFoto = getElementosFoto(elementoAtual);
-                    clonados = map(elementosFoto, deslocaInverte, cl);
-                    fold(clonados, reportarAtributosFold, cl->txt);
-                    // é meio confuso, mas o que tá acontecendo é o seguinte:
-                    // balões -> filas -> fotos -> listas de formas -> formas
-                    // clonados é uma lista de formas criadas a partir de uma foto
-                    // elas tem o x e as cores mudados
-                    // como db também é uma lista de formas, é possível inserir as formas de clonados em db diretamente
-                    // então é só inserir clonados inteiro em db
-                    // porém, a bomba pode atingir um elemento clonado
-                    // então ao invés de percorrer db inteiro de novo pra ver quais clones foram atingidos
-                    // é mais fácil percorrer clonados e inserir os elementos atingidos na lista de atingidos
+                    if (elementosFoto != NULL)
+                    {
+                        ci.xOffset = getXOffsetFoto(elementoAtual);
+                        ci.yOffset = getYOffsetFoto(elementoAtual);
+                        clonados = map(elementosFoto, deslocaInverte, &ci);
+                        fold(clonados, reportarAtributosFold, cl->txt);
+                        // é meio confuso, mas o que tá acontecendo é o seguinte:
+                        // balões -> filas -> fotos -> listas de formas -> formas
+                        // clonados é uma lista de formas criadas a partir de uma foto
+                        // elas tem o x e as cores mudados
+                        // como db também é uma lista de formas, é possível inserir as formas de clonados em db diretamente
+                        // então é só inserir clonados inteiro em db
+                        // porém, a bomba pode atingir um elemento clonado
+                        // então ao invés de percorrer db inteiro de novo pra ver quais clones foram atingidos
+                        // é mais fácil percorrer clonados e inserir os elementos atingidos na lista de atingidos
 
-                    /** no entanto, a lista de atingidos é uma lista de endereços, pra dar pra remover da lista db
-                     (se fosse uma lista de formas o tempo de execução ia ser O(n²) ao invés de O(n))
-                     (visto que teria que percorrer db inteiro pra CADA elemento atingido pra achar ele e remover)
-                     (usando endereços dá pra remover direto da lista db usando removeIntersecao) */
+                        /** no entanto, a lista de atingidos é uma lista de endereços, pra dar pra remover da lista db
+                         (se fosse uma lista de formas o tempo de execução ia ser O(n²) ao invés de O(n))
+                         (visto que teria que percorrer db inteiro pra CADA elemento atingido pra achar ele e remover)
+                         (usando endereços dá pra remover direto da lista db usando removeIntersecao) */
 
-                    // então, percorre clonados e insere os endereços dos elementos atingidos na lista de atingidos
-                    // por consequência, eles são os mesmos elementos que estão em db, já que inserimos a lista clonados em db
+                        // então, percorre clonados e insere os endereços dos elementos atingidos na lista de atingidos
+                        // por consequência, eles são os mesmos elementos que estão em db, já que inserimos a lista clonados em db
 
-                    // o procedimento é complexo, mas ele faz *exatamente* o que foi pedido da maneira mais eficiente que eu encontrei
-                    // poxa sao 5 structs uma dentro da outra, pra percorrer tudo precisa de 5 loops fica feio mas fazer o que né
-                    clonadosEnderecos = checkInCirculoLista(clonados, cl->x, cl->y, cl->r);
-                    insertPosicLst(db, getFirstLst(clonados), clonados);
-                    insertPosicLst(atingidos, getFirstLst(clonadosEnderecos), clonadosEnderecos);
+                        // o procedimento é complexo, mas ele faz *exatamente* o que foi pedido da maneira mais eficiente que eu encontrei
+                        // poxa sao 5 structs uma dentro da outra, pra percorrer tudo precisa de 5 loops fica feio mas fazer o que né
+                        clonadosEnderecos = checkInCirculoLista(clonados, cl->x, cl->y, cl->r);
+                        insertPosicLst(db, getFirstLst(clonados), clonados);
+                        insertPosicLst(atingidos, getFirstLst(clonadosEnderecos), clonadosEnderecos);
+                    }
                 }
                 removeFila(filaBalao);
                 insereFila(filaBalao, elementoInicial);
@@ -286,7 +302,7 @@ void explodeBomba(Lista db, double xbomba, double ybomba, enum tipoBomba tipo, d
     cl.x = xbomba;
     cl.y = ybomba;
     cl.r = raio;
-    cl.j = &j;
+    cl.j = j;
     cl.txt = txt;
     cl.atingidos = NULL;
     struct clausuraX cx;
@@ -300,12 +316,13 @@ void explodeBomba(Lista db, double xbomba, double ybomba, enum tipoBomba tipo, d
     fold(baloesAtingidos, clonaNaoEnviados, &cl); // 3, 4, 5
     getCacaInfo(caca, NULL, &acertosIdsAntes);
     acertosIdsAgora = map(atingidos, getIds, NULL);
-    insertPosicLst(acertosIdsAntes, getFirstLst(acertosIdsAgora), acertosIdsAgora); // 6
-    cacaDisparou(caca);                                                             // 6
-    fprintf(txt, "\nElementos atingidos:\n");                                       // 7
-    fold(atingidos, reportarAtributosFold, txt);                                    // 7
-    fold(atingidos, xVermelhoAncoras, &cx);                                         // 7.5
-    fold(atingidos, removeIntersecao, &cb);                                         // 8
+    if (getFirstLst(acertosIdsAgora) != NULL)
+        insertPosicLst(acertosIdsAntes, getFirstLst(acertosIdsAgora), NULL); // 6
+    cacaDisparou(caca);                                                      // 6
+    fprintf(txt, "\nElementos atingidos:\n");                                // 7
+    fold(atingidos, reportarAtributosElementoFold, txt);                     // 7
+    fold(atingidos, xVermelhoAncoras, &cx);                                  // 7.5
+    fold(atingidos, removeIntersecao, &cb);                                  // 8
     svg_circle(svg, xbomba, ybomba, raio, "none", "red", "stroke-dasharray=\"2,2\"");
     svg_line(svg, xbomba, ybomba, getTextoX(caca), getTextoY(caca), "#FF0000", "stroke-dasharray=\"2,2\"");
 }

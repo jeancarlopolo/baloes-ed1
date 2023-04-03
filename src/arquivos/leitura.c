@@ -325,6 +325,12 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 				}
 				else
 				{
+					bool semFotos = isVaziaFila(getBalaoFilaI(itemEncontrado, atoi(palavras[2]))) ? true : false; // se a fila estiver vazia, não há fotos
+					if (semFotos)
+					{
+						fprintf(txt, "ERRO: Não há fotos na fila %d.\n\n", atoi(palavras[2]));
+						continue;
+					}
 					char nomeArquivo[100];
 					strchr(nomeSvg, '.')[0] = '\0';
 					sprintf(nomeArquivo, "%s-%s.svg", nomeSvg, palavras[3]);
@@ -334,7 +340,6 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 						fprintf(txt, "ERRO: Arquivo %s não pode ser aberto.\n\n", nomeArquivo);
 						continue;
 					}
-
 					Fila fila = getBalaoFilaI(itemEncontrado, atoi(palavras[2]));
 					if (fila == NULL)
 					{
@@ -385,7 +390,9 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 				}
 				else
 				{
-					double xbomba, ybomba;
+					double *xbomba, *ybomba;
+					xbomba = malloc(sizeof(double));
+					ybomba = malloc(sizeof(double));
 					enum tipoBomba tipo;
 					switch (palavras[2][0])
 					{
@@ -401,8 +408,8 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 					default:
 						fprintf(txt, "ERRO: Tipo de bomba inválido.\n\n");
 					}
-					posicaoBomba(getTextoX(itemEncontrado), getTextoY(itemEncontrado), getTextoRotacao(itemEncontrado), tipo, &xbomba, &ybomba);
-					explodeBomba(lista, xbomba, ybomba, tipo, strtod(palavras[5], ponteiro), itemEncontrado, atoi(palavras[4]), txt, svg);
+					posicaoBomba(getTextoX(itemEncontrado), getTextoY(itemEncontrado), getTextoRotacao(itemEncontrado), strtod(palavras[3], ponteiro), xbomba, ybomba);
+					explodeBomba(lista, *xbomba, *ybomba, tipo, strtod(palavras[5], ponteiro), itemEncontrado, atoi(palavras[4]), txt, svg);
 				}
 			}
 			else if (strcmp(palavras[0], "b?") == 0)
@@ -423,7 +430,7 @@ void ler_qry(FILE *qry, FILE *svg, FILE *txt, Lista *lista, char *nomeSvg)
 				while (!isIteratorEmpty(iterador))
 				{
 					itemEncontrado = getIteratorNext(iterador);
-					if (getTipoVeiculo(itemEncontrado) == BALAO)
+					if (getTipoVeiculo(itemEncontrado) == CACA)
 					{
 						reportarAtributos(itemEncontrado, txt);
 					}

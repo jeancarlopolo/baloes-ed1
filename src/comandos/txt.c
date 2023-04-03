@@ -101,7 +101,7 @@ void reportarCaca(void *forma, FILE *txt)
     Lista idsAtingidos;
     getCacaInfo(caca, &disparos, &idsAtingidos);
     fprintf(txt, "Disparou %d vezes\n\
-Ids dos balões atingidos: ",
+Ids das formas atingidas: ",
             disparos);
     printListaInt(idsAtingidos, txt);
     fprintf(txt, "\n");
@@ -166,4 +166,9 @@ void reportarAtributosElemento(void *elemento, FILE *txt)
 void reportarAtributosFold(Item item, Clausura c)
 {
     reportarAtributos(item, c);
+}
+
+void reportarAtributosElementoFold(Item item, Clausura c)
+{
+    reportarAtributosElemento(item, c);
 }

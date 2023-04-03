@@ -288,7 +288,7 @@ Posic getIteratorNextPosic(Iterador it)
     {
         iter->atual = elem->proximo;
     }
-    return iter->atual;
+    return elem;
 }
 
 void killIterator(Iterador it)
@@ -358,7 +358,8 @@ Posic insertPosicLst(Lista L, Posic p, Lista ListaP)
     else
     {
         final->proximo = elemento;
-        elemento->anterior = final;
+        if (elemento != NULL)
+            elemento->anterior = final;
     }
 
     if (ListaP != NULL)

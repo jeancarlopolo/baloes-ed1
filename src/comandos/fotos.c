@@ -7,6 +7,7 @@ struct foto
 {
     Lista lista;
     bool enviado;
+    double xOffset, yOffset; // offset da foto em relação ao mapa, é usado para "desrelativizar" as formas clonadas
 };
 
 struct clausuraFotoTxt
@@ -60,6 +61,7 @@ Y relativo: %lf\n",
                 getTextoY(lista));
         break;
     }
+    fprintf(txt, "\n");
 }
 
 Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt, int i)
@@ -77,7 +79,7 @@ Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt, int i)
              "stroke-dasharray=\"5,3\"");
     struct foto *foto = malloc(sizeof(struct foto));
     Lista listatemp = filter(lista, checkInRect, cRetangulo); // elementos são uma cópia dos originais
-    Lista listanova = map(listatemp, copiaItem, NULL);            // copia a lista para não alterar a original
+    Lista listanova = map(listatemp, copiaItem, NULL);        // copia a lista para não alterar a original
     killLst(listatemp);
     foto->enviado = false;
     struct clausuraFotoTxt cFotoTxt;
@@ -89,6 +91,8 @@ Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt, int i)
                                           getBalaoP(balao),
                                           getBalaoH(balao));
     fold(listanova, moveElementosFoto, cFoto); // move os elementos para o início do svg baseado nas posições relativas
+    foto->xOffset = getTextoX(balao) - getBalaoR(balao);
+    foto->yOffset = getTextoY(balao) + getBalaoP(balao);
     liberaClausuraFoto(cFoto);
     Fila fila = getBalaoFilaI(balao, i);
     insereFila(fila, foto);
@@ -133,11 +137,11 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
     int distancia = 15; // distancia entre as linhas de texto
 
     // id do balao, pontuação, r, h, p
-    svg_text(svg, *dx, getBalaoH(balao) + distancia, id, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 2 * distancia, pontuacaoString, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 3 * distancia, r, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 4 * distancia, h, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
-    svg_text(svg, *dx, getBalaoH(balao) + 5 * distancia, p, "black", "none", 0, "sans (sans-serif)", "normal", "10px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + distancia, id, "black", "none", 0, "sans (sans-serif)", "normal", "15px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 2 * distancia, pontuacaoString, "black", "none", 0, "sans (sans-serif)", "normal", "15px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 3 * distancia, r, "black", "none", 0, "sans (sans-serif)", "normal", "15px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 4 * distancia, h, "black", "none", 0, "sans (sans-serif)", "normal", "15px", "start", NULL);
+    svg_text(svg, *dx, getBalaoH(balao) + 5 * distancia, p, "black", "none", 0, "sans (sans-serif)", "normal", "15px", "start", NULL);
 
     // desenha o retangulo da foto
     svg_rect(svg,
@@ -175,4 +179,18 @@ void liberaFoto(Foto f)
 {
     struct foto *fotoDereferenciada = (struct foto *)f;
     free(fotoDereferenciada);
+}
+
+// Retorna o xOffset da foto
+double getXOffsetFoto(Foto f)
+{
+    struct foto *fotoDereferenciada = (struct foto *)f;
+    return fotoDereferenciada->xOffset;
+}
+
+// Retorna o yOffset da foto
+double getYOffsetFoto(Foto f)
+{
+    struct foto *fotoDereferenciada = (struct foto *)f;
+    return fotoDereferenciada->yOffset;
 }

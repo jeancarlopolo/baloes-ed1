@@ -29,6 +29,12 @@ bool fotoEnviada(Foto f);
 // Retorna os elementos em si da foto
 Lista getElementosFoto(Foto f);
 
+// Retorna o xOffset da foto
+double getXOffsetFoto(Foto f);
+
+// Retorna o yOffset da foto
+double getYOffsetFoto(Foto f);
+
 // Função que libera a memória de uma foto
 void liberaFoto(Foto f);
 

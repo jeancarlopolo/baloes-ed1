@@ -55,9 +55,9 @@ bool checkPontoCirculoItem(Item item, Clausura c)
     struct clausuraCirculo *circulo = (struct clausuraCirculo *)c;
     return checkPontoCirculo(getTextoX(item),
                              getTextoY(item),
+                             circulo->r,
                              circulo->x,
-                             circulo->y,
-                             circulo->r);
+                             circulo->y);
 }
 
 // Item é um texto e clausura é um retângulo
