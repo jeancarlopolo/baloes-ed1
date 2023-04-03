@@ -9,34 +9,4 @@ As fotos podem retratar desde instalações militares ou logísticas de grande i
 regiões vazias ou pouco relevantes. Por isso, a base avalia cada foto e atribui a ela um número que
 denota seu grau de importância: quanto maior o número, maior a importância.
 
-anotações pra mim mesmo:
-- clones
-- testar caminho relativo no ted 
-
-- lendo geo ok
-- colocando na lista ok
-- lendo qry
-- executando comandos qry
-    - mv
-    - g
-    - ff
-    - tf
-    - df
-        - gerando txt e svgs auxiliares das fotos
-        - pontuação
-    - d
-    - b?
-    - c?
-
-- gerando svg final ok
-
-
-PROBLEMAS IMEDIATOS
-CAÇA ACERTO
----
-
-NÃO TA ACERTANDO TEXTO
-NÃO TA REMOVENDO DA LISTA
-NÃO TA REPORTANDO NO SVG
-
 BALÃO PODE TIRAR FOTO DELE MESMO?????????
