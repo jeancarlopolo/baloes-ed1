@@ -17,13 +17,7 @@ CC=gcc
 ALUNO = jeancp
 
 # Flags for compiler
-CC_FLAGS=-W         \
-         -Wall      \
-         -ansi      \
-         -pedantic  \
-	 -std=c99   \
-	-fstack-protector-all \
-		 -ggdb
+CC_FLAGS=--ggdb -O0 -std=c99 -fstack-protector-all -Werror=implicit-function-declaration
 
 LINKER_FLAGS = -lm
 
@@ -33,7 +27,7 @@ LINKER_FLAGS = -lm
 all: $(objects)
 
 $(objects): $(OBJ)
-	$(CC) -o $@ $^ $(CC_FLAGS) $(LINKER_FLAGS)
+	$(CC) -o $@ -O0 $^ $(CC_FLAGS) $(LINKER_FLAGS)
 
 %.o: %.c %.h
 	$(CC) -o $@ $< -c $(CC_FLAGS) $(LINKER_FLAGS)
