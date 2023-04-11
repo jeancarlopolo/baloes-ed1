@@ -112,6 +112,7 @@ Item deslocaInverte(Item item, Clausura c)
                                       getCirculoR(item),
                                       getCirculoCorp(item),
                                       getCirculoCorb(item));
+        setCirculoRotacao(circulo, getCirculoRotacao(item));
         return circulo;
     case RETANGULO:;
         Retangulo retangulo = criaRetangulo(*j - 1,
@@ -121,6 +122,7 @@ Item deslocaInverte(Item item, Clausura c)
                                             getRetanguloAltura(item),
                                             getRetanguloCorPreenchimento(item),
                                             getRetanguloCorBorda(item));
+        setRetanguloRotacao(retangulo, getRetanguloRotacao(item));
         return retangulo;
     case LINHA:;
         Linha linha = criaLinha(*j - 1,
@@ -129,6 +131,7 @@ Item deslocaInverte(Item item, Clausura c)
                                 getLinhaX2(item) + dx + ci->xOffset,
                                 getLinhaY2(item) + ci->yOffset,
                                 getLinhaCor(item));
+        setLinhaRotacao(linha, getLinhaRotacao(item));
         return linha;
     case TEXTO:;
         Texto texto = criaTexto(*j - 1,
@@ -141,6 +144,7 @@ Item deslocaInverte(Item item, Clausura c)
                                 getTextoFamilia(item),
                                 getTextoPeso(item),
                                 getTextoTamanho(item));
+        setTextoRotacao(texto, getTextoRotacao(item));
         return texto;
     }
     return item;
@@ -186,39 +190,35 @@ void clonaNaoEnviados(Item item, Clausura c)
             // se a foto não foi enviada e está dentro do raio da bomba, insere o endereço da foto na lista de elementos que serão removidos
             do // percorre a fila ao remover o elemento atual e inserindo-o no final até que o elemento atual seja o elemento inicial
             {
-                if (fotoEnviada(elementoAtual) == false)
+                elementosFoto = getElementosFoto(elementoAtual);
+                if (elementosFoto != NULL)
                 {
-                    elementosFoto = getElementosFoto(elementoAtual);
-                    if (elementosFoto != NULL)
-                    {
-                        ci.xOffset = getXOffsetFoto(elementoAtual);
-                        ci.yOffset = getYOffsetFoto(elementoAtual);
-                        clonados = map(elementosFoto, deslocaInverte, &ci);
-                        fold(clonados, reportarAtributosFold, cl->txt);
-                        // é meio confuso, mas o que tá acontecendo é o seguinte:
-                        // balões -> filas -> fotos -> listas de formas -> formas
-                        // clonados é uma lista de formas criadas a partir de uma foto
-                        // elas tem o x e as cores mudados
-                        // como db também é uma lista de formas, é possível inserir as formas de clonados em db diretamente
-                        // então é só inserir clonados inteiro em db
-                        // porém, a bomba pode atingir um elemento clonado
-                        // então ao invés de percorrer db inteiro de novo pra ver quais clones foram atingidos
-                        // é mais fácil percorrer clonados e inserir os elementos atingidos na lista de atingidos
+                    ci.xOffset = getXOffsetFoto(elementoAtual);
+                    ci.yOffset = getYOffsetFoto(elementoAtual);
+                    clonados = map(elementosFoto, deslocaInverte, &ci);
+                    fold(clonados, reportarAtributosFold, cl->txt);
+                    // é meio confuso, mas o que tá acontecendo é o seguinte:
+                    // balões -> filas -> fotos -> listas de formas -> formas
+                    // clonados é uma lista de formas criadas a partir de uma foto
+                    // elas tem o x e as cores mudados
+                    // como db também é uma lista de formas, é possível inserir as formas de clonados em db diretamente
+                    // então é só inserir clonados inteiro em db
+                    // porém, a bomba pode atingir um elemento clonado
+                    // então ao invés de percorrer db inteiro de novo pra ver quais clones foram atingidos
+                    // é mais fácil percorrer clonados e inserir os elementos atingidos na lista de atingidos
 
-                        /** no entanto, a lista de atingidos é uma lista de endereços, pra dar pra remover da lista db
-                         (se fosse uma lista de formas o tempo de execução ia ser O(n²) ao invés de O(n))
-                         (visto que teria que percorrer db inteiro pra CADA elemento atingido pra achar ele e remover)
-                         (usando endereços dá pra remover direto da lista db usando removeIntersecao) */
+                    /** no entanto, a lista de atingidos é uma lista de endereços, pra dar pra remover da lista db
+                     (se fosse uma lista de formas o tempo de execução ia ser O(n²) ao invés de O(n))
+                     (visto que teria que percorrer db inteiro pra CADA elemento atingido pra achar ele e remover)
+                     (usando endereços dá pra remover direto da lista db usando removeIntersecao) */
 
-                        // então, percorre clonados e insere os endereços dos elementos atingidos na lista de atingidos
-                        // por consequência, eles são os mesmos elementos que estão em db, já que inserimos a lista clonados em db
+                    // então, percorre clonados e insere os endereços dos elementos atingidos na lista de atingidos
+                    // por consequência, eles são os mesmos elementos que estão em db, já que inserimos a lista clonados em db
 
-                        // o procedimento é complexo, mas ele faz *exatamente* o que foi pedido da maneira mais eficiente que eu encontrei
-                        // poxa sao 5 structs uma dentro da outra, pra percorrer tudo precisa de 5 loops fica feio mas fazer o que né
-                        clonadosEnderecos = checkInCirculoLista(clonados, cl->x, cl->y, cl->r);
-                        insertPosicLst(db, getFirstLst(clonados), clonados);
-                        insertPosicLst(atingidos, getFirstLst(clonadosEnderecos), clonadosEnderecos);
-                    }
+                    // essas próximas 3 linhas são caso tenha que atingir os clones
+                    // clonadosEnderecos = checkInCirculoLista(clonados, cl->x, cl->y, cl->r);
+                    // insertPosicLst(db, getFirstLst(clonados), clonados);
+                    // insertPosicLst(atingidos, getFirstLst(clonadosEnderecos), clonadosEnderecos);
                 }
                 removeFila(filaBalao);
                 insereFila(filaBalao, elementoInicial);

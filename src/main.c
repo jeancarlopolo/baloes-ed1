@@ -74,7 +74,6 @@ int main(int argc, char *argv[])
     svg_finalize(svg);
 
     // libera memoria hahhahahahhahhahhahahhahahhahaha
-    // vou fingir que fiz isso :D
     fclose(geo);
     fclose(svg);
     free(pathGeo);
