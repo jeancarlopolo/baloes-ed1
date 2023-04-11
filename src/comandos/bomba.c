@@ -144,7 +144,7 @@ Item deslocaInverte(Item item, Clausura c)
                                 getTextoFamilia(item),
                                 getTextoPeso(item),
                                 getTextoTamanho(item));
-        setTextoRotacao(texto, getTextoRotacao(item));
+        rotacionaTexto(texto, getTextoRotacao(item));
         return texto;
     }
     return item;
