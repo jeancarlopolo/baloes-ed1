@@ -22,6 +22,7 @@ void svg_rect(FILE *svg,
               int y,
               int w,
               int h,
+              double transform,
               char *fill,
               char *stroke,
               char *style)
@@ -34,6 +35,7 @@ width=\"%d\" \
 height=\"%d\" \
 fill=\"%s\" \
 stroke=\"%s\" \
+transform=\"rotate(%f %d %d)\" \
 %s \
 />\n",
             x,
@@ -42,6 +44,9 @@ stroke=\"%s\" \
             h,
             fill,
             stroke,
+            transform,
+            x,
+            y,
             style);
 }
 
@@ -91,16 +96,21 @@ void svg_line(FILE *svg,
               int y1,
               int x2,
               int y2,
-              char *stroke,
-              char *style)
+                double transform,
+                char *stroke,
+                char *style)
 {
     style = style == NULL ? "" : style;
+    // calcula o centro da linha
+    int cx = (x1 + x2) / 2;
+    int cy = (y1 + y2) / 2;
     fprintf(svg, "<line \
 x1=\"%d\" \
 y1=\"%d\" \
 x2=\"%d\" \
 y2=\"%d\" \
 stroke=\"%s\" \
+transform=\"rotate(%f %d %d)\" \
 %s \
 />\n",
             x1,
@@ -108,6 +118,9 @@ stroke=\"%s\" \
             x2,
             y2,
             stroke,
+            transform,
+            cx,
+            cy,
             style);
 }
 
@@ -115,6 +128,7 @@ void svg_circle(FILE *svg,
                 int cx,
                 int cy,
                 int r,
+                double transform,
                 char *fill,
                 char *stroke,
                 char *style)
@@ -126,6 +140,7 @@ cy=\"%d\" \
 r=\"%d\" \
 fill=\"%s\" \
 stroke=\"%s\" \
+transform=\"rotate(%f %d %d)\" \
 %s \
 />\n",
             cx,
@@ -133,5 +148,8 @@ stroke=\"%s\" \
             r,
             fill,
             stroke,
+            transform,
+            cx,
+            cy,
             style);
 }

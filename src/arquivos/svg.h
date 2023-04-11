@@ -21,6 +21,7 @@ void svg_rect(FILE *svg,
               int y,
               int w,
               int h,
+              double transform,
               char *fill,
               char *stroke,
               char *style);
@@ -30,6 +31,7 @@ void svg_circle(FILE *svg,
                 int cx,
                 int cy,
                 int r,
+                double transform,
                 char *fill,
                 char *stroke,
                 char *style);
@@ -54,6 +56,7 @@ void svg_line(FILE *svg,
               int y1,
               int x2,
               int y2,
+              double transform,
               char *stroke,
               char *style);
 

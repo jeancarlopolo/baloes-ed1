@@ -10,6 +10,9 @@ H_SOURCE=$(wildcard **/*.h) $(wildcard *.h)
 # Object files
 OBJ=$(C_SOURCE:.c=.o)
 
+# Libraries
+LIBS= -lm
+
 # Compiler
 CC=gcc
 
@@ -17,9 +20,9 @@ CC=gcc
 ALUNO = jeancp
 
 # Flags for compiler
-CC_FLAGS=--ggdb -O0 -std=c99 -fstack-protector-all -Werror=implicit-function-declaration
+CC_FLAGS=-ggdb -O0 -std=c99 -fstack-protector-all -Werror=implicit-function-declaration
 
-LINKER_FLAGS = -lm
+LINKER_FLAGS = -O0
 
 #
 # Compilation and linking
@@ -27,10 +30,10 @@ LINKER_FLAGS = -lm
 all: $(objects)
 
 $(objects): $(OBJ)
-	$(CC) -o $@ -O0 $^ $(CC_FLAGS) $(LINKER_FLAGS)
+	$(CC) -o $(objects) $(LINKER_FLAGS) $(OBJ) $(LIBS)
 
-%.o: %.c %.h
-	$(CC) -o $@ $< -c $(CC_FLAGS) $(LINKER_FLAGS)
+%.o: %.c 
+	$(CC) -c $(CC_FLAGS) $< -o $@ 
 
 main.o: main.c $(H_SOURCE)
 	$(CC) -o $@ $< -c $(CC_FLAGS)

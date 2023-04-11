@@ -323,6 +323,6 @@ void explodeBomba(Lista db, double xbomba, double ybomba, enum tipoBomba tipo, d
     fold(atingidos, reportarAtributosElementoFold, txt);                     // 7
     fold(atingidos, xVermelhoAncoras, &cx);                                  // 7.5
     fold(atingidos, removeIntersecao, &cb);                                  // 8
-    svg_circle(svg, xbomba, ybomba, raio, "none", "red", "stroke-dasharray=\"2,2\"");
-    svg_line(svg, xbomba, ybomba, getTextoX(caca), getTextoY(caca), "#FF0000", "stroke-dasharray=\"2,2\"");
+    svg_circle(svg, xbomba, ybomba, raio, 0, "none", "red", "stroke-dasharray=\"2,2\"");
+    svg_line(svg, xbomba, ybomba, getTextoX(caca), getTextoY(caca), 0, "#FF0000", "stroke-dasharray=\"2,2\"");
 }

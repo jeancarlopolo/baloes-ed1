@@ -74,6 +74,7 @@ Foto tirarFoto(Lista lista, FILE *svg, Texto balao, FILE *txt, int i)
              getTextoY(balao) + getBalaoP(balao),
              2 * getBalaoR(balao),
              getBalaoH(balao),
+             0,
              "none",
              "red",
              "stroke-dasharray=\"5,3\"");
@@ -149,6 +150,7 @@ void imprimeFoto(Foto f, FILE *svg, Texto balao, double *dx, double *pontuacao)
              0,
              getBalaoR(balao) * 2,
              getBalaoH(balao),
+             0,
              "none",
              "black",
              NULL);

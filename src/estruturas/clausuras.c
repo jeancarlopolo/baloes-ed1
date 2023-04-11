@@ -60,6 +60,7 @@ void escreveSvg(Item item, Clausura c)
                    getCirculoX(item),
                    getCirculoY(item),
                    getCirculoR(item),
+                   getCirculoRotacao(item),
                    getCirculoCorp(item),
                    getCirculoCorb(item),
                    NULL);
@@ -70,6 +71,7 @@ void escreveSvg(Item item, Clausura c)
                  getRetanguloY(item),
                  getRetanguloLargura(item),
                  getRetanguloAltura(item),
+                 getRetanguloRotacao(item),
                  getRetanguloCorPreenchimento(item),
                  getRetanguloCorBorda(item),
                  NULL);
@@ -94,6 +96,7 @@ void escreveSvg(Item item, Clausura c)
                  getLinhaY1(item),
                  getLinhaX2(item),
                  getLinhaY2(item),
+                 getLinhaRotacao(item),
                  getLinhaCor(item),
                  NULL);
         break;
