@@ -215,9 +215,9 @@ void clonaNaoEnviados(Item item, Clausura c)
                     // então, percorre clonados e insere os endereços dos elementos atingidos na lista de atingidos
                     // por consequência, eles são os mesmos elementos que estão em db, já que inserimos a lista clonados em db
 
-                    // essas próximas 3 linhas são caso tenha que atingir os clones
+                    insertPosicLst(db, getFirstLst(clonados), clonados);
+                    // essas próximas 2 linhas são caso tenha que atingir os clones
                     // clonadosEnderecos = checkInCirculoLista(clonados, cl->x, cl->y, cl->r);
-                    // insertPosicLst(db, getFirstLst(clonados), clonados);
                     // insertPosicLst(atingidos, getFirstLst(clonadosEnderecos), clonadosEnderecos);
                 }
                 removeFila(filaBalao);
