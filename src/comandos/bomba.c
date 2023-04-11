@@ -108,7 +108,7 @@ Item deslocaInverte(Item item, Clausura c)
     case CIRCULO:;
         Circulo circulo = criaCirculo(*j - 1,
                                       getCirculoX(item) + dx + ci->xOffset,
-                                      getCirculoY(item) + +ci->yOffset,
+                                      getCirculoY(item) + ci->yOffset,
                                       getCirculoR(item),
                                       getCirculoCorp(item),
                                       getCirculoCorb(item));
