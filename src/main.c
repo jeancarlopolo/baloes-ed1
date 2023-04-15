@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     Path pathSvgStruct = path_create("");
     Path pathTxtStruct = path_create("");
     char *pathGeo, *pathQry, *nomeSvg, *nomeTxt;
-    char *entrada, *saida, *nomeGeo, *nomeQry = "SEM-QRY";
+    char *entrada = "", *saida = "", *nomeGeo = "", *nomeQry = "";
     Clausura csvg;
     for (int i = 0; i < argc; i++)
     {
@@ -30,20 +30,24 @@ int main(int argc, char *argv[])
             saida = argv[i + 1];
         }
     }
-    updatePath(pathGeoStruct, entrada, nomeGeo, "");
-    if (strcmp(path_get_filename(pathGeoStruct), "") == 0)
+    bool qryExiste = strcmp(nomeQry, "") != 0;
+    if (strcmp(entrada, "") == 0 || strcmp(nomeGeo, "") == 0)
     {
-        printf("Erro: Nome do arquivo geo não informado.\n");
-        return 1;
+        printf("Erro: Entrada ou nome do arquivo geo nao especificados.\n");
+        return 0;
     }
+    updatePath(pathGeoStruct, entrada, nomeGeo, "");
     pathGeo = path_get_full(pathGeoStruct);
     FILE *geo = fopen(pathGeo, "r");
     updatePath(pathQryStruct, entrada, nomeQry, "");
 
     char *NomeGeoQry = malloc(sizeof(char) * (strlen(path_get_filename(pathGeoStruct)) + strlen(path_get_filename(pathQryStruct)) + 2));
     strcpy(NomeGeoQry, path_get_filename(pathGeoStruct));
-    strcat(NomeGeoQry, "-");
-    strcat(NomeGeoQry, path_get_filename(pathQryStruct));
+    if (qryExiste)
+    {
+        strcat(NomeGeoQry, "-");
+        strcat(NomeGeoQry, path_get_filename(pathQryStruct));
+    }
     updatePath(pathSvgStruct, saida, NomeGeoQry, ".svg");
     nomeSvg = path_get_full(pathSvgStruct);
     FILE *svg = fopen(nomeSvg, "w");
@@ -56,7 +60,7 @@ int main(int argc, char *argv[])
     // COMANDOS DO GEO
     ler_geo(geo, db);
 
-    if (strcmp(path_get_filename(pathQryStruct), "SEM-QRY") != 0)
+    if (qryExiste)
     {
         pathQry = path_get_full(pathQryStruct);
         nomeTxt = path_get_full(pathTxtStruct);
@@ -80,6 +84,7 @@ int main(int argc, char *argv[])
     free(nomeSvg);
     free(nomeTxt);
     free(pathQry);
+    free(NomeGeoQry);
     path_destroy(pathGeoStruct);
     path_destroy(pathQryStruct);
     path_destroy(pathSvgStruct);
